@@ -10,6 +10,11 @@ const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: fals
 const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
+const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
+const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
+const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
+const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
+const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
 
 interface Department {
   id: string;
@@ -197,35 +202,128 @@ export default function CottonInstituteDashboard() {
     };
   }, [labEquipment, farmMachinery]);
 
-  // Memoize chart data
+  // Vibrant color palettes
+  const landColors = ["#10b981", "#14b8a6", "#06b6d4", "#3b82f6"]; // Green, Teal, Cyan, Blue
+  const hrColors = ["#a855f7", "#ec4899", "#06b6d4", "#8b5cf6"]; // Purple, Pink, Cyan, Violet
+  const equipmentColors = ["#f59e0b", "#ef4444", "#f97316", "#fbbf24"]; // Orange, Red, Orange-red, Gold
+  const machineryColors = ["#f97316", "#ef4444", "#fbbf24", "#dc2626"]; // Orange, Red, Gold, Dark Red
+
+  // Vibrant color palette for pie charts - predefined array for unique color assignment
+  const PIE_CHART_COLORS = [
+    '#4F46E5', // Indigo
+    '#22C55E', // Emerald Green (Functional)
+    '#F59E0B', // Amber
+    '#EC4899', // Pink
+    '#06B6D4', // Cyan
+    '#8B5CF6', // Purple
+    '#10B981', // Green
+    '#F43F5E', // Rose
+  ];
+
+  // Status colors for Functional/Non-Functional items
+  const FUNCTIONAL_COLOR = '#22C55E'; // Vibrant green
+  const NON_FUNCTIONAL_COLOR = '#EF4444'; // Bright red
+
+  // Memoize chart data - colors will be assigned by index in the chart rendering
   const chartData = useMemo(() => {
     const landDistributionData = land
       ? [
-          { name: "Cultivation", value: Number(land.area_under_cultivation) || 0, color: "#10b981" },
-          { name: "Buildings", value: Number(land.area_under_buildings) || 0, color: "#3b82f6" },
-          { name: "Roads", value: Number(land.area_under_roads) || 0, color: "#f59e0b" },
+          { name: "Cultivation", value: Number(land.area_under_cultivation) || 0, index: 0 },
+          { name: "Buildings", value: Number(land.area_under_buildings) || 0, index: 1 },
+          { name: "Roads", value: Number(land.area_under_roads) || 0, index: 2 },
         ]
       : [];
 
     const labEquipmentStatusData = [
-      { name: "Functional", value: summaryStats.functionalLabEquipment, color: "#10b981" },
-      { name: "Non-Functional", value: summaryStats.nonFunctionalLabEquipment, color: "#ef4444" },
+      { name: "Functional", value: summaryStats.functionalLabEquipment, index: 0 },
+      { name: "Non-Functional", value: summaryStats.nonFunctionalLabEquipment, index: 1 },
     ];
 
     const farmMachineryStatusData = [
-      { name: "Functional", value: summaryStats.functionalFarmMachinery, color: "#10b981" },
-      { name: "Non-Functional", value: summaryStats.nonFunctionalFarmMachinery, color: "#ef4444" },
+      { name: "Functional", value: summaryStats.functionalFarmMachinery, index: 0 },
+      { name: "Non-Functional", value: summaryStats.nonFunctionalFarmMachinery, index: 1 },
     ];
 
-    return { landDistributionData, labEquipmentStatusData, farmMachineryStatusData };
-  }, [land, summaryStats]);
+    // Human Resources bar chart data with vibrant colors
+    const hrBarData = hr
+      ? [
+          { name: "Officers", value: hr.total_officers || 0, color: "#4CAF50", gradient: "from-green-400 to-green-600" },
+          { name: "Field Staff", value: hr.officials_and_field_staff || 0, color: "#2196F3", gradient: "from-blue-400 to-blue-600" },
+          { name: "Vacant", value: hr.vacant_for_officers || 0, color: "#FF9800", gradient: "from-orange-400 to-orange-600" },
+        ]
+      : [];
+
+    return { landDistributionData, labEquipmentStatusData, farmMachineryStatusData, hrBarData };
+  }, [land, summaryStats, hr]);
+
+  // Custom tooltip components for each chart type
+  const LandTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const entry = chartData.landDistributionData.find(item => item.name === payload[0].name);
+      const colorIndex = entry?.index !== undefined ? entry.index % PIE_CHART_COLORS.length : 0;
+      const color = PIE_CHART_COLORS[colorIndex];
+      
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
+          <p className="font-semibold text-gray-900 mb-1">{payload[0].name}</p>
+          <p className="text-sm" style={{ color: color }}>
+            <span className="font-bold">{payload[0].value}</span>
+            {payload[0].payload?.percent && (
+              <span className="text-gray-600 ml-2">({(payload[0].payload.percent * 100).toFixed(1)}%)</span>
+            )}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const LabEquipmentTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const name = payload[0].name;
+      const color = name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+      
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
+          <p className="font-semibold text-gray-900 mb-1">{name}</p>
+          <p className="text-sm" style={{ color: color }}>
+            <span className="font-bold">{payload[0].value}</span>
+            {payload[0].payload?.percent && (
+              <span className="text-gray-600 ml-2">({(payload[0].payload.percent * 100).toFixed(1)}%)</span>
+            )}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const FarmMachineryTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      const name = payload[0].name;
+      const color = name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+      
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
+          <p className="font-semibold text-gray-900 mb-1">{name}</p>
+          <p className="text-sm" style={{ color: color }}>
+            <span className="font-bold">{payload[0].value}</span>
+            {payload[0].payload?.percent && (
+              <span className="text-gray-600 ml-2">({(payload[0].payload.percent * 100).toFixed(1)}%)</span>
+            )}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white shadow-md rounded-b-xl sticky top-0 z-50">
+        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
-            <div className="flex items-center justify-between h-16 sm:h-20 md:h-24 py-3 sm:py-4">
+            <div className="flex items-center justify-between py-3 sm:py-4 md:py-5">
               <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex-shrink-0">
                   <div className="w-full h-full bg-gray-200 rounded-lg animate-pulse"></div>
@@ -261,24 +359,36 @@ export default function CottonInstituteDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <header className="bg-white shadow-md rounded-b-xl sticky top-0 z-50">
+      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
-          <div className="flex items-center justify-between h-16 sm:h-20 md:h-24 py-3 sm:py-4">
+          <div className="flex items-center justify-between py-3 sm:py-4 md:py-5">
             <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex-shrink-0 transition-transform duration-300 hover:scale-105">
                 <Image
-                  src="/cotton.jpg.jpg"
+                  src="/cotton.jpg.png"
                   alt="Cotton Research Institute"
                   fill
                   className="object-cover rounded-lg"
                   priority
+                  unoptimized
+                  onError={(e: any) => {
+                    // Fallback to placeholder if image fails to load
+                    e.target.style.display = 'none';
+                    const placeholder = e.target.parentElement?.querySelector('.placeholder');
+                    if (placeholder) {
+                      (placeholder as HTMLElement).style.display = 'flex';
+                    }
+                  }}
                 />
+                <div className="placeholder absolute inset-0 bg-gradient-to-br from-green-100 to-green-200 border-2 border-green-300 rounded-lg flex items-center justify-center shadow-sm hidden">
+                  <span className="text-green-600 text-[10px] sm:text-xs md:text-sm font-semibold">Logo</span>
+                </div>
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 leading-tight">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 leading-tight tracking-tight">
                   {department?.department_name || "Cotton Research Institute"}
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base text-gray-600 mt-0.5">
+                <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-tight mt-0.5 sm:mt-1">
                   Dashboard & Analytics
                 </p>
               </div>
@@ -294,8 +404,8 @@ export default function CottonInstituteDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {hr && (
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div className="flex items-center justify-between">
-                  <div>
+            <div className="flex items-center justify-between">
+              <div>
                     <p className="text-sm font-medium text-gray-600 mb-1">Total Officers</p>
                     <p className="text-3xl font-bold text-gray-900">{hr.total_officers || 0}</p>
                   </div>
@@ -318,23 +428,23 @@ export default function CottonInstituteDashboard() {
                 <div className="bg-green-500 rounded-full p-3">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                  </svg>
-                </div>
+                </svg>
               </div>
             </div>
+          </div>
 
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="flex items-center justify-between">
+              <div>
                   <p className="text-sm font-medium text-gray-600 mb-1">Farm Machinery</p>
                   <p className="text-3xl font-bold text-gray-900">{summaryStats.totalFarmMachinery}</p>
                   <p className="text-xs text-gray-600 mt-1">{summaryStats.functionalFarmMachinery} functional</p>
-                </div>
+              </div>
                 <div className="bg-purple-500 rounded-full p-3">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                </svg>
                 </div>
               </div>
             </div>
@@ -408,26 +518,63 @@ export default function CottonInstituteDashboard() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                 {/* Chart Section */}
                 {chartsLoaded && chartData.landDistributionData.length > 0 ? (
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Area Distribution</h3>
+                  <div className="bg-gradient-to-br from-emerald-50 via-indigo-50 to-cyan-50 rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Area Distribution</h3>
                     <Suspense fallback={<ChartSkeleton />}>
-                      <ResponsiveContainer width="100%" height={250}>
+                      <ResponsiveContainer width="100%" height={280}>
                         <PieChart>
+                          <defs>
+                            {chartData.landDistributionData.map((entry, index) => {
+                              // Assign unique color by index
+                              const color = PIE_CHART_COLORS[index % PIE_CHART_COLORS.length];
+                              return (
+                                <linearGradient key={`gradient-${index}`} id={`landGradient${index}`} x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor={color} stopOpacity={1} />
+                                  <stop offset="50%" stopColor={color} stopOpacity={0.85} />
+                                  <stop offset="100%" stopColor={color} stopOpacity={0.7} />
+                                </linearGradient>
+                              );
+                            })}
+                          </defs>
                           <Pie
                             data={chartData.landDistributionData}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
-                            label={(entry: any) => `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`}
-                            outerRadius={80}
+                            label={({ name, percent }: any) => `${name}\n${(percent * 100).toFixed(0)}%`}
+                            outerRadius={95}
+                            innerRadius={35}
                             fill="#8884d8"
                             dataKey="value"
+                            animationBegin={0}
+                            animationDuration={800}
+                            stroke="white"
+                            strokeWidth={3}
                           >
-                            {chartData.landDistributionData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
+                            {chartData.landDistributionData.map((entry, index) => {
+                              const color = PIE_CHART_COLORS[index % PIE_CHART_COLORS.length];
+                              return (
+                                <Cell 
+                                  key={`cell-${index}`} 
+                                  fill={`url(#landGradient${index})`}
+                                  style={{ 
+                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'pointer'
+                                  }}
+                                  onMouseEnter={(e: any) => {
+                                    e.target.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))';
+                                    e.target.style.opacity = '0.95';
+                                  }}
+                                  onMouseLeave={(e: any) => {
+                                    e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))';
+                                    e.target.style.opacity = '1';
+                                  }}
+                                />
+                              );
+                            })}
                           </Pie>
-                          <Tooltip />
+                          <Tooltip content={<LandTooltip />} />
                         </PieChart>
                       </ResponsiveContainer>
                     </Suspense>
@@ -479,20 +626,81 @@ export default function CottonInstituteDashboard() {
                   <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
-                </div>
+          </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Human Resources</h2>
-              </div>
+        </div>
+
+              {/* Bar Chart */}
+              {chartsLoaded && chartData.hrBarData.length > 0 && chartData.hrBarData.some(item => item.value > 0) ? (
+                <div className="mb-6 bg-gradient-to-br from-green-50 via-blue-50 to-orange-50 rounded-2xl p-6 shadow-lg border border-gray-100">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Resource Breakdown</h3>
+                  <Suspense fallback={<ChartSkeleton />}>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <BarChart data={chartData.hrBarData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <defs>
+                          {chartData.hrBarData.map((entry, index) => (
+                            <linearGradient key={`hrGradient-${index}`} id={`hrGradient${index}`} x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor={entry.color} stopOpacity={0.95} />
+                              <stop offset="50%" stopColor={entry.color} stopOpacity={0.8} />
+                              <stop offset="100%" stopColor={entry.color} stopOpacity={0.6} />
+                            </linearGradient>
+                          ))}
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
+                        <XAxis 
+                          dataKey="name" 
+                          tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 600 }}
+                          axisLine={{ stroke: '#d1d5db' }}
+                        />
+                        <YAxis 
+                          tick={{ fill: '#6b7280', fontSize: 12 }}
+                          axisLine={{ stroke: '#d1d5db' }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'white', 
+                            border: '1px solid #e5e7eb', 
+                            borderRadius: '8px',
+                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                            padding: '12px'
+                          }}
+                          labelStyle={{ fontWeight: 600, color: '#1f2937' }}
+                          formatter={(value: any) => [value, '']}
+                        />
+                        <Bar 
+                          dataKey="value" 
+                          radius={[10, 10, 0, 0]}
+                          animationDuration={800}
+                          animationBegin={0}
+                        >
+                          {chartData.hrBarData.map((entry, index) => (
+                            <Cell 
+                              key={`bar-${index}`} 
+                              fill={`url(#hrGradient${index})`}
+                              style={{ 
+                                filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15))',
+                                transition: 'all 0.3s ease'
+                              }}
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </Suspense>
+                </div>
+              ) : null}
+
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 hover:shadow-md transition-all">
-                  <p className="text-sm text-gray-600 mb-2">Total Officers</p>
+                <div className="p-5 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200 hover:shadow-lg transition-all transform hover:scale-105">
+                  <p className="text-sm text-gray-600 mb-2 font-medium">Total Officers</p>
                   <p className="text-3xl font-bold text-gray-900">{hr.total_officers || 0}</p>
                 </div>
-                <div className="p-5 bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200 hover:shadow-md transition-all">
-                  <p className="text-sm text-gray-600 mb-2">Officials & Field Staff</p>
+                <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200 hover:shadow-lg transition-all transform hover:scale-105">
+                  <p className="text-sm text-gray-600 mb-2 font-medium">Officials & Field Staff</p>
                   <p className="text-3xl font-bold text-gray-900">{hr.officials_and_field_staff || 0}</p>
                 </div>
-                <div className="p-5 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg border border-orange-200 hover:shadow-md transition-all">
-                  <p className="text-sm text-gray-600 mb-2">Vacant Positions</p>
+                <div className="p-5 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200 hover:shadow-lg transition-all transform hover:scale-105">
+                  <p className="text-sm text-gray-600 mb-2 font-medium">Vacant Positions</p>
                   <p className="text-3xl font-bold text-gray-900">{hr.vacant_for_officers || 0}</p>
                 </div>
               </div>
@@ -509,42 +717,86 @@ export default function CottonInstituteDashboard() {
                   </svg>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Laboratory Equipment</h2>
-              </div>
+          </div>
 
               {/* Status Chart */}
               {chartsLoaded && chartData.labEquipmentStatusData.some((item) => item.value > 0) ? (
-                <div className="mb-6 bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Equipment Status</h3>
+                <div className="mb-6 bg-gradient-to-br from-green-50 via-red-50 to-green-50 rounded-2xl p-6 shadow-lg border border-gray-100">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Equipment Status</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Suspense fallback={<ChartSkeleton />}>
-                      <ResponsiveContainer width="100%" height={200}>
+                      <ResponsiveContainer width="100%" height={250}>
                         <PieChart>
+                          <defs>
+                            {chartData.labEquipmentStatusData.map((entry, index) => {
+                              // Use green for Functional, red for Non-Functional
+                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+                              return (
+                                <linearGradient key={`equipGradient-${index}`} id={`equipGradient${index}`} x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor={color} stopOpacity={1} />
+                                  <stop offset="50%" stopColor={color} stopOpacity={0.85} />
+                                  <stop offset="100%" stopColor={color} stopOpacity={0.7} />
+                                </linearGradient>
+                              );
+                            })}
+                          </defs>
                           <Pie
                             data={chartData.labEquipmentStatusData}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
-                            label={(entry: any) => `${entry.name}: ${entry.value} (${(entry.percent * 100).toFixed(0)}%)`}
-                            outerRadius={70}
+                            label={({ name, value, percent }: any) => `${name}\n${value} (${(percent * 100).toFixed(0)}%)`}
+                            outerRadius={85}
+                            innerRadius={40}
                             fill="#8884d8"
                             dataKey="value"
+                            animationBegin={0}
+                            animationDuration={800}
+                            stroke="white"
+                            strokeWidth={3}
                           >
-                            {chartData.labEquipmentStatusData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
+                            {chartData.labEquipmentStatusData.map((entry, index) => {
+                              // Use green for Functional, red for Non-Functional
+                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+                              return (
+                                <Cell 
+                                  key={`cell-${index}`} 
+                                  fill={`url(#equipGradient${index})`}
+                                  style={{ 
+                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'pointer'
+                                  }}
+                                  onMouseEnter={(e: any) => {
+                                    e.target.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))';
+                                    e.target.style.opacity = '0.95';
+                                  }}
+                                  onMouseLeave={(e: any) => {
+                                    e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))';
+                                    e.target.style.opacity = '1';
+                                  }}
+                                />
+                              );
+                            })}
                           </Pie>
-                          <Tooltip />
+                          <Tooltip content={<LabEquipmentTooltip />} />
                         </PieChart>
                       </ResponsiveContainer>
                     </Suspense>
-                    <div className="flex flex-col justify-center gap-3">
-                      {chartData.labEquipmentStatusData.map((item, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <div className="w-4 h-4 rounded-full" style={{ backgroundColor: item.color }}></div>
-                          <span className="text-sm text-gray-700">{item.name}:</span>
-                          <span className="text-lg font-bold text-gray-900">{item.value}</span>
-                        </div>
-                      ))}
+                    <div className="flex flex-col justify-center gap-4">
+                      {chartData.labEquipmentStatusData.map((item, index) => {
+                        // Use green for Functional, red for Non-Functional
+                        const color = item.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+                        return (
+                          <div key={index} className="flex items-center gap-4 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                            <div className="w-6 h-6 rounded-full shadow-sm" style={{ backgroundColor: color }}></div>
+                            <div className="flex-1">
+                              <span className="text-sm font-medium text-gray-700">{item.name}:</span>
+                              <span className="text-xl font-bold text-gray-900 ml-2">{item.value}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -589,7 +841,7 @@ export default function CottonInstituteDashboard() {
                               {item.status?.toLowerCase() === "non-functional" && (
                                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
+                </svg>
                               )}
                               {item.status || "N/A"}
                             </span>
@@ -612,44 +864,88 @@ export default function CottonInstituteDashboard() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                </div>
+          </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Farm Machinery</h2>
-              </div>
+        </div>
 
               {/* Status Chart */}
               {chartsLoaded && chartData.farmMachineryStatusData.some((item) => item.value > 0) ? (
-                <div className="mb-6 bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Machinery Status</h3>
+                <div className="mb-6 bg-gradient-to-br from-green-50 via-red-50 to-green-50 rounded-2xl p-6 shadow-lg border border-gray-100">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Machinery Status</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Suspense fallback={<ChartSkeleton />}>
-                      <ResponsiveContainer width="100%" height={200}>
+                      <ResponsiveContainer width="100%" height={250}>
                         <PieChart>
+                          <defs>
+                            {chartData.farmMachineryStatusData.map((entry, index) => {
+                              // Use green for Functional, red for Non-Functional
+                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+                              return (
+                                <linearGradient key={`machGradient-${index}`} id={`machGradient${index}`} x1="0" y1="0" x2="0" y2="1">
+                                  <stop offset="0%" stopColor={color} stopOpacity={1} />
+                                  <stop offset="50%" stopColor={color} stopOpacity={0.85} />
+                                  <stop offset="100%" stopColor={color} stopOpacity={0.7} />
+                                </linearGradient>
+                              );
+                            })}
+                          </defs>
                           <Pie
                             data={chartData.farmMachineryStatusData}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
-                            label={(entry: any) => `${entry.name}: ${entry.value} (${(entry.percent * 100).toFixed(0)}%)`}
-                            outerRadius={70}
+                            label={({ name, value, percent }: any) => `${name}\n${value} (${(percent * 100).toFixed(0)}%)`}
+                            outerRadius={85}
+                            innerRadius={40}
                             fill="#8884d8"
                             dataKey="value"
+                            animationBegin={0}
+                            animationDuration={800}
+                            stroke="white"
+                            strokeWidth={3}
                           >
-                            {chartData.farmMachineryStatusData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
+                            {chartData.farmMachineryStatusData.map((entry, index) => {
+                              // Use green for Functional, red for Non-Functional
+                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+                              return (
+                                <Cell 
+                                  key={`cell-${index}`} 
+                                  fill={`url(#machGradient${index})`}
+                                  style={{ 
+                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
+                                    transition: 'all 0.3s ease',
+                                    cursor: 'pointer'
+                                  }}
+                                  onMouseEnter={(e: any) => {
+                                    e.target.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))';
+                                    e.target.style.opacity = '0.95';
+                                  }}
+                                  onMouseLeave={(e: any) => {
+                                    e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))';
+                                    e.target.style.opacity = '1';
+                                  }}
+                                />
+                              );
+                            })}
                           </Pie>
-                          <Tooltip />
+                          <Tooltip content={<FarmMachineryTooltip />} />
                         </PieChart>
                       </ResponsiveContainer>
                     </Suspense>
-                    <div className="flex flex-col justify-center gap-3">
-                      {chartData.farmMachineryStatusData.map((item, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <div className="w-4 h-4 rounded-full" style={{ backgroundColor: item.color }}></div>
-                          <span className="text-sm text-gray-700">{item.name}:</span>
-                          <span className="text-lg font-bold text-gray-900">{item.value}</span>
-                        </div>
-                      ))}
+                    <div className="flex flex-col justify-center gap-4">
+                      {chartData.farmMachineryStatusData.map((item, index) => {
+                        // Use green for Functional, red for Non-Functional
+                        const color = item.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
+                        return (
+                          <div key={index} className="flex items-center gap-4 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                            <div className="w-6 h-6 rounded-full shadow-sm" style={{ backgroundColor: color }}></div>
+                <div className="flex-1">
+                              <span className="text-sm font-medium text-gray-700">{item.name}:</span>
+                              <span className="text-xl font-bold text-gray-900 ml-2">{item.value}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -712,7 +1008,7 @@ export default function CottonInstituteDashboard() {
           {!department && !land && !hr && (!labEquipment || labEquipment.length === 0) && (!farmMachinery || farmMachinery.length === 0) && (
             <div className="bg-white rounded-xl shadow-lg p-8 text-center">
               <p className="text-gray-600 text-lg">No data available at this time.</p>
-            </div>
+          </div>
           )}
         </div>
       </div>

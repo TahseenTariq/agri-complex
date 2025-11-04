@@ -2,8 +2,8 @@
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-8 sm:py-10 md:py-12">
+    <footer className="bg-white border-t border-gray-200 h-[5in] min-h-[5in] flex flex-col">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 flex-1 flex flex-col justify-center w-full">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-10 mb-8">
           {/* Agriculture Complex Information */}
