@@ -31,67 +31,13 @@ export default function Header() {
 
   return (
     <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[1.3in] flex items-center">
-      <div className="max-w-9xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 w-full py-2 sm:py-0">
-        <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-0">
-          {/* Logo Section - Above text on mobile, left on desktop */}
-          <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 flex-wrap order-1 sm:order-2 self-center">
-            <div className="flex-shrink-0 relative h-12 w-12 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.75in] lg:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
-              <Image
-                src="/logo.png.png"
-                alt="South Punjab Government Logo 1"
-                fill
-                className="object-contain rounded-lg"
-                priority
-                unoptimized
-              />
-            </div>
-            <div className="flex-shrink-0 relative h-12 w-12 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.75in] lg:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
-              <Image
-                src="/logo2.png.png"
-                alt="South Punjab Government Logo 2"
-                fill
-                className="object-contain rounded-lg"
-                priority
-                unoptimized
-              />
-            </div>
-            <div className="flex-shrink-0 relative h-12 w-12 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.7in] lg:w-[0.7in] transition-all duration-300 hover:scale-110 hover:brightness-110">
-              <Image
-                src="/logo3.png.jpg"
-                alt="South Punjab Government Logo 3"
-                fill
-                className="object-contain rounded-lg"
-                priority
-                unoptimized
-              />
-            </div>
-            <div className="flex-shrink-0 relative h-12 w-12 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.6in] md:w-[0.6in] lg:h-[0.85in] lg:w-[0.85in] transition-all duration-300 hover:scale-110 hover:brightness-110">
-              <Image
-                src="/logo4.jpg.jpeg"
-                alt="South Punjab Government Logo 4"
-                fill
-                className="object-contain rounded-lg"
-                priority
-                unoptimized
-              />
-            </div>
-            <div className="flex-shrink-0 relative h-12 w-12 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.75in] lg:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
-              <Image
-                src="/logo5.jpg.jpg"
-                alt="South Punjab Government Logo 5"
-                fill
-                className="object-contain rounded-lg"
-                priority
-                unoptimized
-              />
-            </div>
-          </div>
-
-          {/* Title and Subheading - Below logo on mobile, right on desktop */}
-          <div className="flex flex-col items-center sm:items-start text-center sm:text-left order-2 sm:order-1 self-center">
+      <div className="max-w-9xl mx-auto px-4 py-2 sm:px-6 md:px-8 lg:px-10 sm:py-0 w-full">
+        <div className="flex items-center justify-between gap-4">
+          {/* Left Side - Title and Subheading */}
+          <div className="flex flex-col items-start text-left flex-shrink-0">
             <button
               onClick={handleTitleClick}
-              className="cursor-pointer transition-colors duration-200 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded block"
+              className="text-left cursor-pointer transition-colors duration-200 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded block"
             >
               <h1 
                 className="font-medium tracking-tight leading-tight text-gray-900 hover:underline text-base sm:text-lg md:text-xl lg:text-3xl transition-all duration-300"
@@ -104,6 +50,60 @@ export default function Header() {
             >
               South Punjab
             </p>
+          </div>
+
+          {/* Right Side - Five Logos Side by Side */}
+          <div className="flex items-center justify-end gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 flex-wrap flex-shrink-0">
+            <div className="flex-shrink-0 relative h-10 w-10 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.75in] lg:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
+              <Image
+                src="/logo.png.png"
+                alt="South Punjab Government Logo 1"
+                fill
+                className="object-contain rounded-lg"
+                priority
+                unoptimized
+              />
+            </div>
+            <div className="flex-shrink-0 relative h-10 w-10 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.75in] lg:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
+              <Image
+                src="/logo2.png.png"
+                alt="South Punjab Government Logo 2"
+                fill
+                className="object-contain rounded-lg"
+                priority
+                unoptimized
+              />
+            </div>
+            <div className="flex-shrink-0 relative h-10 w-10 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.7in] lg:w-[0.7in] transition-all duration-300 hover:scale-110 hover:brightness-110">
+              <Image
+                src="/logo3.png.jpg"
+                alt="South Punjab Government Logo 3"
+                fill
+                className="object-contain rounded-lg"
+                priority
+                unoptimized
+              />
+            </div>
+            <div className="flex-shrink-0 relative h-10 w-10 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.6in] md:w-[0.6in] lg:h-[0.85in] lg:w-[0.85in] transition-all duration-300 hover:scale-110 hover:brightness-110">
+              <Image
+                src="/logo4.jpg.jpeg"
+                alt="South Punjab Government Logo 4"
+                fill
+                className="object-contain rounded-lg"
+                priority
+                unoptimized
+              />
+            </div>
+            <div className="flex-shrink-0 relative h-10 w-10 sm:h-[0.65in] sm:w-[0.65in] md:h-[0.7in] md:w-[0.7in] lg:h-[0.75in] lg:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
+              <Image
+                src="/logo5.jpg.jpg"
+                alt="South Punjab Government Logo 5"
+                fill
+                className="object-contain rounded-lg"
+                priority
+                unoptimized
+              />
+            </div>
           </div>
         </div>
       </div>
