@@ -7,11 +7,11 @@ import FeatureData from "@/main-page/FeatureData";
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isCottonInstitute = pathname === "/cotton-institute";
+  const isDashboardRoute = pathname === "/cotton-institute" || pathname === "/mns-data";
 
   return (
     <>
-      {!isCottonInstitute && (
+      {!isDashboardRoute && (
         <>
           <ImageCarousel />
           <FeatureSection />

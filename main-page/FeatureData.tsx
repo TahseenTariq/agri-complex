@@ -14,7 +14,7 @@ interface Cotton {
 const cottons: Cotton[] = [
   {
     id: 1,
-    name: "MNS-Lab Details",
+    name: "MNS Lab Resources",
     image: "/mns.png.jpg",
     imageAlt: "MNS-Lab Details",
   },
@@ -56,9 +56,12 @@ const cottons: Cotton[] = [
 export default function FeatureData() {
   const router = useRouter();
 
-  const handleCardClick = (cottonId: number) => {
+  const handleCardClick = (cottonId: number, cottonName: string) => {
     if (cottonId === 3) {
       router.push("/cotton-institute");
+    } else if (cottonId === 1) {
+      // Navigate to MNS Lab / MNS Data page - force full page navigation
+      window.location.href = "/mns-data";
     } else {
       console.log("Coming Soon");
     }
@@ -79,16 +82,27 @@ export default function FeatureData() {
           {cottons.map((cotton) => (
             <div
               key={cotton.id}
-              onClick={() => handleCardClick(cotton.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleCardClick(cotton.id, cotton.name);
+              }}
               className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer group"
             >
               {/* Institute Image */}
-              <div className="relative w-full h-48 sm:h-56 bg-gray-50 flex items-center justify-center overflow-hidden">
+              <div 
+                className="relative w-full h-48 sm:h-56 bg-gray-50 flex items-center justify-center overflow-hidden"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleCardClick(cotton.id, cotton.name);
+                }}
+              >
                 <Image
                   src={cotton.image}
                   alt={cotton.imageAlt}
                   fill
-                  className="object-contain rounded-t-2xl transition-transform duration-300 group-hover:scale-105 p-2"
+                  className="object-contain rounded-t-2xl transition-transform duration-300 group-hover:scale-105 p-2 pointer-events-none"
                   unoptimized
                   onError={(e: any) => {
                     // Fallback to placeholder if image fails to load
