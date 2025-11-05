@@ -2,10 +2,10 @@
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200 h-[5in] min-h-[5in] flex flex-col">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 flex-1 flex flex-col justify-center w-full">
+    <footer className="bg-white border-t border-gray-200 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] flex flex-col py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 flex-1 flex flex-col justify-center w-full">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-10 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 md:gap-10 mb-6 sm:mb-8">
           {/* Agriculture Complex Information */}
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Agriculture Complex, South Punjab Multan</h3>
@@ -70,8 +70,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright Bar */}
-        <div className="border-t border-gray-200 pt-6 sm:pt-8">
-          <p className="text-center text-sm text-gray-600">
+        <div className="border-t border-gray-200 pt-4 sm:pt-6 md:pt-8 mt-4 sm:mt-6">
+          <p className="text-center text-xs sm:text-sm text-gray-600 px-4">
             © 2025 Agriculture Complex, South Punjab Multan. All rights reserved.
           </p>
         </div>

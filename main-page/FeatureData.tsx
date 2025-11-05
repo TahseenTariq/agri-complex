@@ -80,17 +80,17 @@ export default function FeatureData() {
   };
 
   return (
-    <div className="w-full bg-gray-100 pt-0 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gray-100 pt-0 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Heading Section */}
-        <div className="text-center mb-10 sm:mb-12 lg:mb-16 pt-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-gray-900 leading-tight tracking-tight">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 pt-8 sm:pt-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-normal text-gray-900 leading-tight tracking-tight px-4">
             Research Institutes
           </h2>
         </div>
 
         {/* Grid Layout: 1 column on mobile, 2 on tablet, 3 on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {cottons.map((cotton) => (
             <div
               key={cotton.id}
@@ -98,13 +98,13 @@ export default function FeatureData() {
             >
               {/* Institute Image */}
               <div 
-                className="relative w-full h-48 sm:h-56 bg-gray-50 overflow-hidden"
+                className="relative w-full h-48 sm:h-56 md:h-64 lg:h-72 bg-gray-50 overflow-hidden"
               >
                 <Image
                   src={cotton.image}
                   alt={cotton.imageAlt}
                   fill
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-105"
                   unoptimized
                   onError={(e: any) => {
                     // Fallback to placeholder if image fails to load
