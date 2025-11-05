@@ -342,11 +342,11 @@ export default function MnsDataPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
-            <div className="flex items-center justify-between py-3 sm:py-4 md:py-5">
+        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
+            <div className="flex items-center justify-between h-full">
               <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
-                <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex-shrink-0 bg-gray-200 rounded-lg animate-pulse"></div>
+                <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 bg-gray-200 rounded-lg animate-pulse"></div>
                 <div className="flex flex-col gap-2">
                   <div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div>
                   <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
@@ -373,13 +373,13 @@ export default function MnsDataPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
-          <div className="flex items-center justify-between py-3 sm:py-4 md:py-5">
+      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
+          <div className="flex items-center justify-between h-full">
             <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
-              <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex-shrink-0 transition-transform duration-300 hover:scale-105">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 transition-transform duration-300 hover:scale-105">
                 <Image
-                  src="/mns.png.jpg"
+                  src="/agri.jpg.png"
                   alt="MNS Lab"
                   fill
                   className="object-cover rounded-lg"
@@ -398,11 +398,11 @@ export default function MnsDataPage() {
                 </div>
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 leading-tight tracking-tight">
-                    MNS Lab Resources
+                <h1 className="text-base sm:text-lg md:text-xl lg:text-4xl font-medium text-gray-800 leading-tight tracking-tight">
+                    Agriculture Engineering
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-tight mt-0.5 sm:mt-1">
-                  Laboratory Information
+                <p className="text-xs sm:text-xs md:text-sm text-gray-600 leading-tight mt-0.5">
+                  Resources Information
                 </p>
               </div>
             </div>
@@ -420,47 +420,6 @@ export default function MnsDataPage() {
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
               <p className="text-red-800 text-sm font-medium">⚠️ {error}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Department Info Section */}
-        {department && (
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-6 sm:p-8 mb-8 border border-blue-100">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-              Department Information
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Department Name</p>
-                  <p className="text-base font-medium text-gray-900">MNS Agriculture Engineering, Multan</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Focal Person</p>
-                  <p className="text-base text-gray-700">{department.focal_person_name || "N/A"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Designation</p>
-                  <p className="text-base text-gray-700">{department.designation || "N/A"}</p>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Address</p>
-                  <p className="text-base text-gray-700">{department.address || "N/A"}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Contact</p>
-                  <div className="space-y-1">
-                    <p className="text-base text-gray-700">📞 {department.telephone || "N/A"}</p>
-                    <p className="text-base text-gray-700">✉️ {department.email || "N/A"}</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         )}
@@ -523,6 +482,47 @@ export default function MnsDataPage() {
             </div>
           </div>
         </div>
+
+        {/* Department Info Section */}
+        {department && (
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-6 sm:p-8 mb-8 border border-blue-100">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              Department Information
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Department Name</p>
+                  <p className="text-base font-medium text-gray-900">MNS Agriculture Engineering, Multan</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Focal Person</p>
+                  <p className="text-base text-gray-700">{department.focal_person_name || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Designation</p>
+                  <p className="text-base text-gray-700">{department.designation || "N/A"}</p>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Address</p>
+                  <p className="text-base text-gray-700">{department.address || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Contact</p>
+                  <div className="space-y-1">
+                    <p className="text-base text-gray-700">📞 {department.telephone || "N/A"}</p>
+                    <p className="text-base text-gray-700">✉️ {department.email || "N/A"}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Data Tables */}
         <div className="space-y-6">

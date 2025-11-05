@@ -21,7 +21,7 @@ export default function ImageCarousel() {
 
   return (
     <div className="relative w-full flex justify-center">
-      <div className="relative w-full max-w-[1536px] h-64 sm:h-80 md:h-96 overflow-hidden bg-gray-100 rounded-2xl">
+      <div className="relative w-full max-w-[1536px] h-[5.5in] overflow-hidden bg-gray-100 rounded-2xl">
         {/* Image Container */}
         <div className="relative w-full h-full rounded-2xl overflow-hidden">
         {!imageError ? (

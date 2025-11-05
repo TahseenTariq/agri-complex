@@ -228,9 +228,8 @@ export default function CottonInstituteDashboard() {
   const chartData = useMemo(() => {
     const landDistributionData = land
       ? [
-          { name: "Cultivation", value: Number(land.area_under_cultivation) || 0, index: 0 },
-          { name: "Buildings", value: Number(land.area_under_buildings) || 0, index: 1 },
-          { name: "Roads", value: Number(land.area_under_roads) || 0, index: 2 },
+          { name: "Functional", value: Number(land.area_under_cultivation) || 0, index: 0 },
+          { name: "Non-Functional", value: (Number(land.area_under_buildings) || 0) + (Number(land.area_under_roads) || 0), index: 1 },
         ]
       : [];
 
@@ -260,8 +259,8 @@ export default function CottonInstituteDashboard() {
   const LandTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const entry = chartData.landDistributionData.find(item => item.name === payload[0].name);
-      const colorIndex = entry?.index !== undefined ? entry.index % PIE_CHART_COLORS.length : 0;
-      const color = PIE_CHART_COLORS[colorIndex];
+      // Assign color based on Functional/Non-Functional
+      const color = entry?.name === "Functional" ? '#16a34a' : '#dc2626'; // green-600 and red-600
       
       return (
         <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
@@ -321,11 +320,11 @@ export default function CottonInstituteDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
-            <div className="flex items-center justify-between py-3 sm:py-4 md:py-5">
+        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
+            <div className="flex items-center justify-between h-full">
               <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
-                <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex-shrink-0">
+                <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0">
                   <div className="w-full h-full bg-gray-200 rounded-lg animate-pulse"></div>
                 </div>
                 <div className="flex flex-col">
@@ -359,11 +358,11 @@ export default function CottonInstituteDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
-          <div className="flex items-center justify-between py-3 sm:py-4 md:py-5">
+      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
+          <div className="flex items-center justify-between h-full">
             <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
-              <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 flex-shrink-0 transition-transform duration-300 hover:scale-105">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 transition-transform duration-300 hover:scale-105">
                 <Image
                   src="/cotton.jpg.png"
                   alt="Cotton Research Institute"
@@ -385,10 +384,10 @@ export default function CottonInstituteDashboard() {
                 </div>
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 leading-tight tracking-tight">
+                <h1 className="text-base sm:text-lg md:text-xl lg:text-4xl font-medium text-gray-800 leading-tight tracking-tight">
                   {department?.department_name || "Cotton Research Institute"}
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base text-gray-600 leading-tight mt-0.5 sm:mt-1">
+                <p className="text-xs sm:text-xs md:text-sm text-gray-600 leading-tight mt-0.5">
                   Dashboard & Analytics
                 </p>
               </div>
@@ -525,8 +524,8 @@ export default function CottonInstituteDashboard() {
                         <PieChart>
                           <defs>
                             {chartData.landDistributionData.map((entry, index) => {
-                              // Assign unique color by index
-                              const color = PIE_CHART_COLORS[index % PIE_CHART_COLORS.length];
+                              // Assign color based on Functional/Non-Functional
+                              const color = entry.name === "Functional" ? '#16a34a' : '#dc2626'; // green-600 and red-600
                               return (
                                 <linearGradient key={`gradient-${index}`} id={`landGradient${index}`} x1="0" y1="0" x2="0" y2="1">
                                   <stop offset="0%" stopColor={color} stopOpacity={1} />
@@ -552,7 +551,8 @@ export default function CottonInstituteDashboard() {
                             strokeWidth={3}
                           >
                             {chartData.landDistributionData.map((entry, index) => {
-                              const color = PIE_CHART_COLORS[index % PIE_CHART_COLORS.length];
+                              // Assign color based on Functional/Non-Functional
+                              const color = entry.name === "Functional" ? '#16a34a' : '#dc2626'; // green-600 and red-600
                               return (
                                 <Cell 
                                   key={`cell-${index}`} 
