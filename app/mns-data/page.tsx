@@ -748,7 +748,7 @@ export default function MnsDataPage() {
 
         <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
         <div className="max-w-7xl mx-auto px-3 py-1 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
-          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-2 sm:gap-4 w-full h-full text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-1.5 sm:gap-4 w-full h-full text-center sm:text-left">
             <div className="flex items-center gap-1.5 sm:gap-4 md:gap-5 flex-shrink-0">
               <div className="relative w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 bg-gray-200 rounded-lg animate-pulse"></div>
                 <div className="flex flex-col items-center sm:items-start gap-1.5">
@@ -779,7 +779,7 @@ export default function MnsDataPage() {
       {/* Header Section */}
       <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
         <div className="max-w-7xl mx-auto px-3 py-1 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
-          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-1.5 sm:gap-4 w-full h-full">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-1.5 sm:gap-4 w-full h-full text-center sm:text-left">
             <div className="flex items-center gap-1.5 sm:gap-4 md:gap-5 flex-shrink-0">
               <div className="relative w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 transition-transform duration-300 hover:scale-105">
                 <Image
