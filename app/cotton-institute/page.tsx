@@ -331,9 +331,9 @@ export default function CottonInstituteDashboard() {
     return (
       <div className="min-h-screen bg-app-surface">
         <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
-        <div className="max-w-7xl mx-auto px-3 py-2 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
-          <div className="flex items-center gap-2 sm:gap-4 h-full">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
+            <div className="flex items-center gap-4 h-full">
+              <div className="w-12 h-12 bg-gray-200 rounded-lg animate-pulse" />
               <div className="space-y-2">
                 <div className="w-40 h-4 bg-gray-200 rounded animate-pulse" />
                 <div className="w-24 h-3 bg-gray-200 rounded animate-pulse" />
@@ -361,16 +361,16 @@ export default function CottonInstituteDashboard() {
   return (
     <div className="min-h-screen bg-app-surface">
       <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
-        <div className="max-w-7xl mx-auto px-3 py-2 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
-          <div className="flex items-center gap-2 sm:gap-4 h-full">
-            <div className="relative w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
+          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 h-full text-center sm:text-left">
+            <div className="relative w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
               <Image src="/cotton.jpg.png" alt="Cotton Research Institute" fill className="object-cover" priority unoptimized />
             </div>
-            <div className="flex flex-col">
-              <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-semibold text-gray-900 leading-tight">
+            <div className="flex flex-col items-center sm:items-start">
+              <h1 className="text-base sm:text-xl md:text-3xl lg:text-4xl font-semibold text-gray-900 leading-tight">
                 {department?.department_name || "Cotton Research Institute"}
               </h1>
-              <p className="text-xs sm:text-sm text-gray-600">Dashboard &amp; Analytics</p>
+              <p className="text-[11px] sm:text-sm text-gray-600 mt-0.5">Dashboard &amp; Analytics</p>
             </div>
           </div>
         </div>
