@@ -64,13 +64,13 @@ const cottons: Cotton[] = [
     imageAlt: "MNS University Of Agriculture",
   },
   {
-    id: 8,
+    id: 9,
     name: "Agricultural Extension",
     image: "/ext.jpg.jpg",
     imageAlt: "Agricultural Extension",
   },
   {
-    id: 9,
+    id: 10,
     name: "AMRI",
     image: "/amri.jpg.jpg",
     imageAlt: "AMRI",
