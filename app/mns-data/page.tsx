@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, useMemo, memo } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState, useMemo, memo, Suspense } from "react";
+import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
 import { supabase } from "@/lib/supabase-client";
 
 // Fixed department ID for "Directorate of Agricultural Engineering, Multan"
@@ -36,6 +38,236 @@ const getTableColumns = (data: any[], excludeFields: string[] = ['id', 'departme
   }
   
   return filtered;
+};
+
+const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
+const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
+const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
+const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
+const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
+
+type PieDatum = { name: string; value: number };
+
+interface GradientStop {
+  start: string;
+  end: string;
+}
+
+const chartPalettes: Record<string, GradientStop[]> = {
+  buildings: [
+    { start: "#2563EB", end: "#60A5FA" },
+    { start: "#1E3A8A", end: "#3B82F6" },
+    { start: "#0EA5E9", end: "#67E8F9" },
+    { start: "#38BDF8", end: "#0EA5E9" },
+    { start: "#1D4ED8", end: "#3B82F6" },
+  ],
+  farm: [
+    { start: "#16A34A", end: "#4ADE80" },
+    { start: "#22C55E", end: "#86EFAC" },
+    { start: "#15803D", end: "#34D399" },
+    { start: "#0F766E", end: "#14B8A6" },
+    { start: "#14532D", end: "#22C55E" },
+  ],
+  lab: [
+    { start: "#7C3AED", end: "#C4B5FD" },
+    { start: "#8B5CF6", end: "#A855F7" },
+    { start: "#6D28D9", end: "#A78BFA" },
+    { start: "#9333EA", end: "#C084FC" },
+    { start: "#5B21B6", end: "#7C3AED" },
+  ],
+  human: [
+    { start: "#F97316", end: "#FDBA74" },
+    { start: "#F97316", end: "#F59E0B" },
+    { start: "#EA580C", end: "#FBBF24" },
+    { start: "#C2410C", end: "#FB923C" },
+    { start: "#F97316", end: "#FB923C" },
+  ],
+  hand: [
+    { start: "#0EA5E9", end: "#67E8F9" },
+    { start: "#0284C7", end: "#38BDF8" },
+    { start: "#0369A1", end: "#0EA5E9" },
+    { start: "#075985", end: "#38BDF8" },
+    { start: "#0EA5E9", end: "#22D3EE" },
+  ],
+  power: [
+    { start: "#F43F5E", end: "#FECDD3" },
+    { start: "#E11D48", end: "#FDA4AF" },
+    { start: "#BE123C", end: "#FB7185" },
+    { start: "#9F1239", end: "#F43F5E" },
+    { start: "#F43F5E", end: "#FB7185" },
+  ],
+  electricity: [
+    { start: "#6366F1", end: "#A5B4FC" },
+    { start: "#4F46E5", end: "#818CF8" },
+    { start: "#4338CA", end: "#6366F1" },
+    { start: "#312E81", end: "#4F46E5" },
+    { start: "#6366F1", end: "#A855F7" },
+  ],
+};
+
+const fallbackPalette: GradientStop[] = [
+  { start: "#2563EB", end: "#60A5FA" },
+  { start: "#22C55E", end: "#86EFAC" },
+  { start: "#F97316", end: "#FDBA74" },
+  { start: "#8B5CF6", end: "#C4B5FD" },
+  { start: "#F43F5E", end: "#FDA4AF" },
+  { start: "#0EA5E9", end: "#67E8F9" },
+  { start: "#EC4899", end: "#F9A8D4" },
+  { start: "#14B8A6", end: "#5EEAD4" },
+];
+
+const tooltipFormatter = (value: ValueType, name: NameType): [string, string] => [String(value ?? ""), String(name ?? "")];
+
+const formatLabel = (name: string | undefined, percent: number | undefined) => {
+  const safePercent = typeof percent === "number" ? percent * 100 : 0;
+  const safeName = name ?? "";
+  return `${safeName}: ${safePercent.toFixed(1)}%`;
+};
+
+const formatAbsoluteLabel = (
+  name: string | undefined,
+  value: number | undefined,
+  formatter?: (value: number) => string
+) => {
+  const safeValue = typeof value === "number" && Number.isFinite(value) ? value : 0;
+  const formattedValue = formatter ? formatter(safeValue) : safeValue.toString();
+  const label = name ?? "";
+  return `${label}: ${formattedValue}`;
+};
+
+const resolveGradient = (chartId: string, index: number): GradientStop => {
+  const palette = chartPalettes[chartId] ?? fallbackPalette;
+  return palette[index % palette.length];
+};
+
+interface PieVisualizationOptions {
+  chartHeight?: number;
+  titleClassName?: string;
+  labelMode?: "percent" | "value";
+  valueFormatter?: (value: number) => string;
+}
+
+const renderPieVisualization = (
+  title: string,
+  data: PieDatum[],
+  chartId: string,
+  emptyMessage: string,
+  options?: PieVisualizationOptions
+) => {
+  const chartHeight = options?.chartHeight ?? 320;
+  const titleClassName = options?.titleClassName ?? "text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center";
+  const labelMode = options?.labelMode ?? "percent";
+  const valueFormatterOption = options?.valueFormatter;
+
+  const tooltipFormatterWithMode = (value: ValueType, name: NameType): [string, string] => {
+    if (labelMode === "value") {
+      const numericValue =
+        typeof value === "number"
+          ? value
+          : Array.isArray(value)
+          ? Number(value[0])
+          : Number(value ?? 0);
+      const safeValue = Number.isFinite(numericValue) ? numericValue : 0;
+      const formatted = valueFormatterOption ? valueFormatterOption(safeValue) : safeValue.toString();
+      return [formatted, String(name ?? "")];
+    }
+    return tooltipFormatter(value, name);
+  };
+
+  return (
+    <div className="bg-gradient-to-br from-white via-slate-50 to-gray-100 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
+      <h3 className={titleClassName}>{title}</h3>
+      {data.length > 0 ? (
+        <>
+          <ResponsiveContainer width="100%" height={chartHeight}>
+            <PieChart>
+              <defs>
+                {data.map((slice, index) => {
+                  const { start, end } = resolveGradient(chartId, index);
+                  return (
+                    <linearGradient key={`${chartId}-grad-${index}`} id={`${chartId}-grad-${index}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={start} stopOpacity={0.95} />
+                      <stop offset="60%" stopColor={start} stopOpacity={0.82} />
+                      <stop offset="100%" stopColor={end} stopOpacity={0.68} />
+                    </linearGradient>
+                  );
+                })}
+              </defs>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                outerRadius={130}
+                innerRadius={58}
+                dataKey="value"
+                paddingAngle={2}
+                stroke="white"
+                strokeWidth={3}
+                label={({ name, percent, value }: { name?: string; percent?: number; value?: number }) =>
+                  labelMode === "value"
+                    ? formatAbsoluteLabel(name, value, valueFormatterOption)
+                    : formatLabel(name, percent)
+                }
+                labelLine={false}
+              >
+                {data.map((slice, index) => (
+                  <Cell
+                    key={`${chartId}-slice-${slice.name}-${index}`}
+                    fill={`url(#${chartId}-grad-${index})`}
+                    style={{
+                      filter: "drop-shadow(0 12px 16px rgba(15, 23, 42, 0.18))",
+                      transition: "transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease",
+                    }}
+                    onMouseEnter={(event) => {
+                      const target = event.currentTarget as SVGElement;
+                      target.style.transform = "scale(1.05)";
+                      target.style.filter = "drop-shadow(0 20px 28px rgba(15, 23, 42, 0.28))";
+                      target.style.opacity = "0.95";
+                    }}
+                    onMouseLeave={(event) => {
+                      const target = event.currentTarget as SVGElement;
+                      target.style.transform = "scale(1)";
+                      target.style.filter = "drop-shadow(0 12px 16px rgba(15, 23, 42, 0.18))";
+                      target.style.opacity = "1";
+                    }}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={tooltipFormatterWithMode}
+                contentStyle={{
+                  backgroundColor: "#ffffff",
+                  border: "1px solid rgba(148, 163, 184, 0.25)",
+                  borderRadius: "14px",
+                  boxShadow: "0 18px 28px -16px rgba(15, 23, 42, 0.45)",
+                  padding: "14px 18px",
+                }}
+                labelStyle={{ fontWeight: 600, color: "#1f2937" }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm text-gray-600">
+            {data.map((slice, index) => {
+              const { start, end } = resolveGradient(chartId, index);
+              return (
+                <div key={`${chartId}-legend-${slice.name}-${index}`} className="flex items-center gap-2">
+                  <span
+                    className="w-3 h-3 rounded-full"
+                    style={{ background: `linear-gradient(135deg, ${start} 0%, ${end} 100%)` }}
+                  />
+                  <span className="font-medium">{slice.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <div className="flex items-center justify-center h-40 rounded-xl bg-white/70 border border-white/60 text-sm text-gray-500">
+          {emptyMessage}
+        </div>
+      )}
+    </div>
+  );
 };
 
 // Skeleton Components
@@ -76,6 +308,14 @@ const SkeletonSummaryCard = memo(() => (
   </div>
 ));
 SkeletonSummaryCard.displayName = "SkeletonSummaryCard";
+
+const ChartSkeleton = memo(() => (
+  <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl border border-slate-200 p-6 animate-pulse">
+    <div className="h-5 w-40 bg-gray-200 rounded mx-auto mb-6"></div>
+    <div className="mx-auto bg-gray-200 rounded-full" style={{ width: 220, height: 220 }}></div>
+  </div>
+));
+ChartSkeleton.displayName = "ChartSkeleton";
 
 // Enhanced Table Component with sticky headers
 const DataTable = memo(({ 
@@ -148,6 +388,112 @@ const DataTable = memo(({
   );
 });
 DataTable.displayName = "DataTable";
+
+type ValueSummary = {
+  values: string[];
+  uniqueValues: string[];
+  validCount: number;
+};
+
+const derivePieData = (
+  records: any[],
+  preferredKeys: string[] = []
+): PieDatum[] => {
+  if (!records || records.length === 0) return [];
+
+  const rows = records.filter((row) => row && typeof row === "object");
+  if (rows.length === 0) return [];
+
+  const skipKeys = new Set(["id", "created_at", "updated_at", "department_id", "_sr_no"]);
+  const lowerPreferred = preferredKeys.map((key) => key.toLowerCase());
+
+  const collectUniqueValues = (key: string): ValueSummary => {
+    const values: string[] = rows
+      .map((row) => row[key])
+      .map((value) => {
+        if (value === null || value === undefined || value === "") {
+          return "Unknown";
+        }
+        if (typeof value === "number") {
+          return value.toString();
+        }
+        return String(value).trim() || "Unknown";
+      });
+
+    const uniqueValues = Array.from(new Set(values));
+    const validCount = values.filter((val) => val !== "Unknown").length;
+
+    return { values, uniqueValues, validCount };
+  };
+
+  const candidateKeys = Array.from(
+    new Set(
+      rows.flatMap((row) =>
+        Object.keys(row || {})
+          .map((key) => key.trim())
+          .filter((key) => key && !skipKeys.has(key.toLowerCase()) && key.toLowerCase() !== "serial_no")
+      )
+    )
+  );
+
+  let chosenKey: string | null = null;
+  let chosenDetails: ValueSummary | null = null;
+  let bestScore = -Infinity;
+
+  candidateKeys.forEach((key) => {
+    const { values, uniqueValues, validCount } = collectUniqueValues(key);
+    if (values.length === 0) return;
+
+    const uniqueCount = uniqueValues.length;
+    if (uniqueCount === 0) return;
+
+    const keyLower = key.toLowerCase();
+    const preferredIndex = lowerPreferred.indexOf(keyLower);
+
+    const isPreferred = preferredIndex !== -1;
+    const isCategoricalRange = uniqueCount <= 8;
+    const diversityScore = Math.min(uniqueCount, 10);
+
+    let score = diversityScore;
+    if (isPreferred) score += 50 - preferredIndex * 2;
+    if (isCategoricalRange) score += 15;
+    if (validCount / values.length > 0.4) score += 10;
+
+    if (score > bestScore) {
+      bestScore = score;
+      chosenKey = key;
+      chosenDetails = { values, uniqueValues, validCount };
+    }
+  });
+
+  if (!chosenKey) {
+    return [{ name: "Total Records", value: rows.length }];
+  }
+
+  if (!chosenDetails) {
+    return [{ name: "Total Records", value: rows.length }];
+  }
+
+  const detailValues = (chosenDetails as ValueSummary).values;
+
+  const counts = detailValues.reduce<Record<string, number>>((acc: Record<string, number>, value: string) => {
+    const label = formatColumnName(value);
+    acc[label] = (acc[label] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  const entries: PieDatum[] = Object.entries(counts)
+    .map(([name, value]) => ({ name, value: Number(value) }))
+    .sort((a, b) => b.value - a.value);
+
+  if (entries.length <= 8) {
+    return entries;
+  }
+
+  const topEntries = entries.slice(0, 7);
+  const otherTotal = entries.slice(7).reduce((sum, entry) => sum + entry.value, 0);
+  return [...topEntries, { name: "Other", value: otherTotal }];
+};
 
 export default function MnsDataPage() {
   // State for all data tables
@@ -336,6 +682,63 @@ export default function MnsDataPage() {
   const electricityResistivityMetersColumns = useMemo(() => {
     return createColumnsWithSerialNo(electricityResistivityMeters, false);
   }, [electricityResistivityMeters]);
+
+  const buildingPieData = useMemo(() => derivePieData(buildingDetails, [
+    "status",
+    "building_type",
+    "type",
+    "category",
+    "condition",
+    "usage",
+  ]), [buildingDetails]);
+
+  const farmMachineryPieData = useMemo(() => derivePieData(farmMachinery, [
+    "status",
+    "condition",
+    "machine_type",
+    "category",
+    "location",
+  ]), [farmMachinery]);
+
+  const labMachineryPieData = useMemo(() => derivePieData(labMachinery, [
+    "status",
+    "equipment_type",
+    "condition",
+    "category",
+    "department",
+  ]), [labMachinery]);
+
+  const humanResourcesPieData = useMemo(() => derivePieData(humanResources, [
+    "designation",
+    "status",
+    "role",
+    "employment_type",
+    "category",
+  ]), [humanResources]);
+
+  const handBoringPlantsPieData = useMemo(() => derivePieData(handBoringPlants, [
+    "status",
+    "type",
+    "category",
+    "condition",
+    "location",
+  ]), [handBoringPlants]);
+
+  const powerDrillingRigsPieData = useMemo(() => derivePieData(powerDrillingRigs, [
+    "status",
+    "type",
+    "category",
+    "condition",
+    "location",
+  ]), [powerDrillingRigs]);
+
+  const electricityResistivityMetersPieData = useMemo(() => derivePieData(electricityResistivityMeters, [
+    "status",
+    "type",
+    "category",
+    "condition",
+    "location",
+  ]), [electricityResistivityMeters]);
 
 
   // Loading state
@@ -539,11 +942,16 @@ export default function MnsDataPage() {
         <div className="space-y-4 sm:space-y-6">
           {/* Building Details Table */}
           {buildingDetails.length > 0 ? (
-            <DataTable
-              title="Building Details"
-              data={buildingDetails}
-              columns={buildingColumns}
-            />
+            <div className="space-y-4 sm:space-y-6">
+              <Suspense fallback={<ChartSkeleton />}>
+                {renderPieVisualization("Building Details Breakdown", buildingPieData, "buildings", "No breakdown data available.", { chartHeight: 260 })}
+              </Suspense>
+              <DataTable
+                title="Building Details"
+                data={buildingDetails}
+                columns={buildingColumns}
+              />
+            </div>
           ) : (
             <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Building Details</h3>
@@ -553,11 +961,16 @@ export default function MnsDataPage() {
 
           {/* Farm Machinery Table */}
           {farmMachinery.length > 0 ? (
-            <DataTable
-              title="Farm Machinery"
-              data={farmMachinery}
-              columns={farmMachineryColumns}
-            />
+            <div className="space-y-4 sm:space-y-6">
+              <Suspense fallback={<ChartSkeleton />}>
+                {renderPieVisualization("Farm Machinery Status", farmMachineryPieData, "farm", "No breakdown data available.", { chartHeight: 260 })}
+              </Suspense>
+              <DataTable
+                title="Farm Machinery"
+                data={farmMachinery}
+                columns={farmMachineryColumns}
+              />
+            </div>
           ) : (
             <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Farm Machinery</h3>
@@ -595,11 +1008,16 @@ export default function MnsDataPage() {
 
           {/* Hand Boring Plants Table */}
           {handBoringPlants.length > 0 ? (
-            <DataTable
-              title="Hand Boring Plants"
-              data={handBoringPlants}
-              columns={handBoringPlantsColumns}
-            />
+            <div className="space-y-4 sm:space-y-6">
+              <Suspense fallback={<ChartSkeleton />}>
+                {renderPieVisualization("Hand Boring Plants Overview", handBoringPlantsPieData, "hand", "No breakdown data available.", { chartHeight: 260 })}
+              </Suspense>
+              <DataTable
+                title="Hand Boring Plants"
+                data={handBoringPlants}
+                columns={handBoringPlantsColumns}
+              />
+            </div>
           ) : (
             <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Hand Boring Plants</h3>
@@ -623,11 +1041,16 @@ export default function MnsDataPage() {
 
           {/* Electricity Resistivity Meters Table */}
           {electricityResistivityMeters.length > 0 ? (
-            <DataTable
-              title="Electricity Resistivity Meters"
-              data={electricityResistivityMeters}
-              columns={electricityResistivityMetersColumns}
-            />
+            <div className="space-y-4 sm:space-y-6">
+              <Suspense fallback={<ChartSkeleton />}>
+                {renderPieVisualization("Electricity Resistivity Meters", electricityResistivityMetersPieData, "electricity", "No breakdown data available.", { chartHeight: 260 })}
+              </Suspense>
+              <DataTable
+                title="Electricity Resistivity Meters"
+                data={electricityResistivityMeters}
+                columns={electricityResistivityMetersColumns}
+              />
+            </div>
           ) : (
             <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Electricity Resistivity Meters</h3>
