@@ -748,11 +748,11 @@ export default function MnsDataPage() {
         <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
       <div className="max-w-7xl mx-auto px-3 py-1 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
             <div className="flex items-center justify-between h-full">
-              <div className="flex items-center gap-2 sm:gap-4 md:gap-5 flex-shrink-0">
-                <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 bg-gray-200 rounded-lg animate-pulse"></div>
-                <div className="flex flex-col gap-2">
-                  <div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div>
-                  <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+              <div className="flex items-center gap-1.5 sm:gap-4 md:gap-5 flex-shrink-0">
+                <div className="relative w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 bg-gray-200 rounded-lg animate-pulse"></div>
+                <div className="flex flex-col gap-1.5">
+                  <div className="h-5 w-40 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-3.5 w-28 bg-gray-200 rounded animate-pulse"></div>
                 </div>
               </div>
             </div>
@@ -779,8 +779,8 @@ export default function MnsDataPage() {
       <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
         <div className="max-w-7xl mx-auto px-3 py-1 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
           <div className="flex items-center justify-between h-full">
-            <div className="flex items-center gap-2 sm:gap-4 md:gap-5 flex-shrink-0">
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 transition-transform duration-300 hover:scale-105">
+            <div className="flex items-center gap-1.5 sm:gap-4 md:gap-5 flex-shrink-0">
+              <div className="relative w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 flex-shrink-0 transition-transform duration-300 hover:scale-105">
                 <Image
                   src="/agri.jpg.png"
                   alt="MNS Lab"
@@ -797,14 +797,14 @@ export default function MnsDataPage() {
                   }}
                 />
                 <div className="placeholder absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-200 border-2 border-blue-300 rounded-lg flex items-center justify-center shadow-sm hidden">
-                  <span className="text-blue-600 text-[10px] sm:text-xs md:text-sm font-semibold">Logo</span>
+                  <span className="text-blue-600 text-[9px] sm:text-xs md:text-sm font-semibold">Logo</span>
                 </div>
               </div>
-              <div className="flex flex-col">
-                <h1 className="text-base sm:text-lg md:text-xl lg:text-4xl font-medium text-gray-800 leading-tight tracking-tight">
+              <div className="flex flex-col items-start">
+                <h1 className="text-xs sm:text-lg md:text-xl lg:text-4xl font-medium text-gray-800 leading-tight tracking-tight">
                     Agriculture Engineering
                 </h1>
-                <p className="text-xs sm:text-xs md:text-sm text-gray-600 leading-tight mt-0.5">
+                <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 leading-tight mt-0.5">
                   Resources Information
                 </p>
               </div>
