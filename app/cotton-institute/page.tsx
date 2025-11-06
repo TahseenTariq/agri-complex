@@ -362,7 +362,7 @@ export default function CottonInstituteDashboard() {
     <div className="min-h-screen bg-app-surface">
       <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
-          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 h-full text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between gap-2 sm:gap-4 h-full text-left">
             <div className="relative w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
               <Image src="/cotton.jpg.png" alt="Cotton Research Institute" fill className="object-cover" priority unoptimized />
             </div>
