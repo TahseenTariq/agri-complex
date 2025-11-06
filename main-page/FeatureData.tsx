@@ -63,7 +63,12 @@ const cottons: Cotton[] = [
     image: "/mns.png.jpg",
     imageAlt: "MNS University Of Agriculture",
   },
-
+  {
+    id: 8,
+    name: "Agricultural Extension",
+    image: "/ext.jpg.jpg",
+    imageAlt: "Agricultural Extension",
+  },
   {
     id: 9,
     name: "AMRI",
@@ -87,11 +92,11 @@ export default function FeatureData() {
   };
 
   return (
-    <div className="w-full bg-gray-100 pt-0 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-12">
+    <div className="w-full bg-app-surface pt-0 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
         {/* Heading Section */}
         <div className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 pt-8 sm:pt-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-normal text-gray-900 leading-tight tracking-tight px-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-normal text-foreground leading-tight tracking-tight px-4">
             Research Institutes
           </h2>
         </div>
@@ -101,11 +106,11 @@ export default function FeatureData() {
           {cottons.map((cotton) => (
             <div
               key={cotton.id}
-              className="w-full max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col"
+              className="w-full max-w-sm panel-card rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col"
             >
               {/* Institute Image */}
               <div 
-                className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-gray-50 overflow-hidden"
+                className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-white/10 backdrop-blur-sm overflow-hidden"
               >
                 <Image
                   src={cotton.image}
@@ -130,7 +135,7 @@ export default function FeatureData() {
               {/* Card Content */}
               <div className="p-3 sm:p-4 lg:p-5 flex flex-col flex-grow">
                 {/* Institute Name */}
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal text-gray-900 leading-tight tracking-tight mb-3">
+                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal text-foreground leading-tight tracking-tight mb-3">
                   {cotton.name}
                 </h3>
                 
@@ -141,7 +146,7 @@ export default function FeatureData() {
                     e.stopPropagation();
                     handleCardClick(cotton.id, cotton.name);
                   }}
-                  className="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 sm:py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base"
+                  className="btn-primary mt-auto w-full font-medium py-2 sm:py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none text-sm sm:text-base"
                 >
                   Learn More
                 </button>
