@@ -541,9 +541,9 @@ export default function CottonInstituteDashboard() {
                             cy="50%"
                             labelLine={false}
                             label={({ name, percent }: any) => `${name}\n${(percent * 100).toFixed(0)}%`}
-                            outerRadius={95}
-                            innerRadius={35}
-                            fill="#8884d8"
+                            outerRadius={115}
+                            innerRadius={55}
+                            fill="#16a34a"
                             dataKey="value"
                             animationBegin={0}
                             animationDuration={800}

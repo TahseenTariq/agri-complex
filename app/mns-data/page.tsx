@@ -447,8 +447,19 @@ export default function MnsDataPage() {
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">{farmMachinery.length}</p>
               </div>
               <div className="w-12 h-12 bg-green-200 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.8}
+                    d="M10.343 3.94c.09-.54.56-.94 1.11-.94h1.094c.55 0 1.02.4 1.11.94l.149.894a1.125 1.125 0 001.64.79l.805-.46a1.125 1.125 0 011.45.372l.548.95c.275.476.18 1.08-.223 1.45l-.67.62c-.4.37-.45.98-.11 1.42l.53.69c.33.43.38 1.03.12 1.5l-.51.88c-.26.46-.78.7-1.29.59l-.936-.21c-.53-.12-1.07.16-1.25.68l-.29.86c-.17.52-.66.86-1.2.86h-1.094c-.55 0-1.02-.34-1.11-.86l-.149-.894a1.125 1.125 0 00-1.64-.79l-.805.46a1.125 1.125 0 01-1.45-.372l-.548-.95c-.275-.476-.18-1.08.223-1.45l.67-.62c.4-.37.45-.98.11-1.42l-.53-.69a1.125 1.125 0 01-.12-1.5l.51-.88c.26-.46.78-.7 1.29-.59l.936.21c.53.12 1.07-.16 1.25-.68l.29-.86z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.8}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
                 </svg>
               </div>
             </div>
@@ -485,15 +496,15 @@ export default function MnsDataPage() {
 
         {/* Department Info Section */}
         {department && (
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 border border-blue-100">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-3 sm:p-5 md:p-6 mb-6 sm:mb-8 border border-blue-100">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-3 sm:mb-5 flex items-center gap-2">
               <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
               <span>Department Information</span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5">
+              <div className="space-y-2.5">
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Department Name</p>
                   <p className="text-base font-medium text-gray-900">MNS Agriculture Engineering, Multan</p>
@@ -507,7 +518,7 @@ export default function MnsDataPage() {
                   <p className="text-base text-gray-700">{department.designation || "N/A"}</p>
                 </div>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Address</p>
                   <p className="text-base text-gray-700">{department.address || "N/A"}</p>

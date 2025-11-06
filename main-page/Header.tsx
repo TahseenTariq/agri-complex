@@ -37,6 +37,16 @@ export default function Header() {
           <div className="flex items-center justify-center sm:justify-end gap-1 sm:gap-2 md:gap-2.5 lg:gap-3 xl:gap-4 flex-shrink-0 order-1 sm:order-2">
             <div className="flex-shrink-0 relative h-7 w-7 sm:h-8 sm:w-8 md:h-[0.65in] md:w-[0.65in] lg:h-[0.7in] lg:w-[0.7in] xl:h-[0.75in] xl:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
               <Image
+                src="/logo6.png"
+                alt="South Punjab Government Logo 6"
+                fill
+                className="object-contain rounded-lg"
+                priority
+                unoptimized
+              />
+            </div>
+            <div className="flex-shrink-0 relative h-7 w-7 sm:h-8 sm:w-8 md:h-[0.65in] md:w-[0.65in] lg:h-[0.7in] lg:w-[0.7in] xl:h-[0.75in] xl:w-[0.75in] transition-all duration-300 hover:scale-110 hover:brightness-110">
+              <Image
                 src="/logo.png.png"
                 alt="South Punjab Government Logo 1"
                 fill

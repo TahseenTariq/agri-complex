@@ -21,9 +21,9 @@ const cottons: Cotton[] = [
   
   {
     id: 1,
-    name: "Agriculture Engineering",
+    name: "Agriculture Engineering Field Wing",
     image: "/agri.jpg.png",
-    imageAlt: "Agriculture Engineering",
+    imageAlt: "Agriculture Engineering Field Wing",
   },
   
   {
@@ -63,6 +63,13 @@ const cottons: Cotton[] = [
     image: "/mns.png.jpg",
     imageAlt: "MNS University Of Agriculture",
   },
+
+  {
+    id: 9,
+    name: "AMRI",
+    image: "/amri.jpg.jpg",
+    imageAlt: "AMRI",
+  },
 ];
 
 export default function FeatureData() {
@@ -90,15 +97,15 @@ export default function FeatureData() {
         </div>
 
         {/* Grid Layout: 1 column on mobile, 2 on tablet, 3 on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-6 justify-items-center">
           {cottons.map((cotton) => (
             <div
               key={cotton.id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col"
+              className="w-full max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col"
             >
               {/* Institute Image */}
               <div 
-                className="relative w-full h-48 sm:h-56 md:h-64 lg:h-72 bg-gray-50 overflow-hidden"
+                className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-gray-50 overflow-hidden"
               >
                 <Image
                   src={cotton.image}
@@ -121,9 +128,9 @@ export default function FeatureData() {
               </div>
 
               {/* Card Content */}
-              <div className="p-4 sm:p-5 lg:p-6 flex flex-col flex-grow">
+              <div className="p-3 sm:p-4 lg:p-5 flex flex-col flex-grow">
                 {/* Institute Name */}
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal text-gray-900 leading-tight tracking-tight mb-4">
+                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal text-gray-900 leading-tight tracking-tight mb-3">
                   {cotton.name}
                 </h3>
                 
