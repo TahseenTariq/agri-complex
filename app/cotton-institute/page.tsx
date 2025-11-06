@@ -330,7 +330,7 @@ export default function CottonInstituteDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-app-surface">
-        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:h-[1.3in]">
+        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
             <div className="flex items-center gap-4 h-full">
               <div className="w-12 h-12 bg-gray-200 rounded-lg animate-pulse" />
@@ -360,7 +360,7 @@ export default function CottonInstituteDashboard() {
 
   return (
     <div className="min-h-screen bg-app-surface">
-      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:h-[1.3in]">
+      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
           <div className="flex items-center gap-4 h-full">
             <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 shadow-sm">
