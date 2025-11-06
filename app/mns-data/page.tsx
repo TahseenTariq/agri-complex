@@ -745,7 +745,7 @@ export default function MnsDataPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-app-surface">
-        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3rem] sm:min-h-[1.3in]">
+        <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
       <div className="max-w-7xl mx-auto px-3 py-1 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
             <div className="flex items-center justify-between h-full">
               <div className="flex items-center gap-2 sm:gap-4 md:gap-5 flex-shrink-0">
@@ -776,7 +776,7 @@ export default function MnsDataPage() {
   return (
     <div className="min-h-screen bg-app-surface">
       {/* Header Section */}
-      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3rem] sm:min-h-[1.3in]">
+      <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 min-h-[3.5rem] sm:min-h-[1.3in]">
         <div className="max-w-7xl mx-auto px-3 py-1 sm:px-6 md:px-8 lg:px-10 sm:py-0 h-full">
           <div className="flex items-center justify-between h-full">
             <div className="flex items-center gap-2 sm:gap-4 md:gap-5 flex-shrink-0">
