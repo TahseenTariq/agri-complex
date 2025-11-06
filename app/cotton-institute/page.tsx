@@ -57,7 +57,7 @@ interface FarmMachinery {
 }
 
 const SkeletonCard = memo(() => (
-  <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
+  <div className="panel-card-soft rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
     <div className="h-6 bg-gray-200 rounded w-1/3 mb-4" />
     <div className="space-y-3">
       <div className="h-4 bg-gray-200 rounded w-full" />
@@ -82,7 +82,7 @@ const SkeletonSummaryCard = memo(() => (
 SkeletonSummaryCard.displayName = "SkeletonSummaryCard";
 
 const TableSkeleton = memo(() => (
-  <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
+  <div className="panel-card-soft rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
     <div className="h-6 bg-gray-200 rounded w-48 mb-6" />
     <div className="space-y-3">
       <div className="h-12 bg-gray-200 rounded" />
@@ -329,7 +329,7 @@ export default function CottonInstituteDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-app-surface">
         <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
             <div className="flex items-center gap-4 h-full">
@@ -359,7 +359,7 @@ export default function CottonInstituteDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-app-surface">
       <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
           <div className="flex items-center gap-4 h-full">
@@ -444,7 +444,7 @@ export default function CottonInstituteDashboard() {
         </section>
 
         {department && (
-          <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
+          <section className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
             <header className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
               <div className="bg-blue-100 rounded-lg p-2">
                 <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -487,7 +487,7 @@ export default function CottonInstituteDashboard() {
         )}
 
         {land && (
-          <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
+          <section className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
             <header className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
               <div className="bg-green-100 rounded-lg p-2">
                 <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -537,7 +537,7 @@ export default function CottonInstituteDashboard() {
         )}
 
         {hr && (
-          <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
+          <section className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
             <header className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
               <div className="bg-blue-100 rounded-lg p-2">
                 <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -569,7 +569,7 @@ export default function CottonInstituteDashboard() {
         )}
 
         {labEquipment && labEquipment.length > 0 && (
-          <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
+          <section className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
             <header className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
               <div className="bg-emerald-100 rounded-lg p-2">
                 <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -596,7 +596,7 @@ export default function CottonInstituteDashboard() {
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="table-surface divide-y divide-gray-200">
                     {labEquipment.map((item) => (
                       <tr key={item.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-4 py-3 whitespace-nowrap text-[11px] sm:text-xs md:text-sm text-gray-900">{item.serial_no ?? "N/A"}</td>
@@ -627,7 +627,7 @@ export default function CottonInstituteDashboard() {
         )}
 
         {farmMachinery && farmMachinery.length > 0 && (
-          <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
+          <section className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8 mb-8">
             <header className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
               <div className="bg-purple-100 rounded-lg p-2">
                 <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -655,7 +655,7 @@ export default function CottonInstituteDashboard() {
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="table-surface divide-y divide-gray-200">
                     {farmMachinery.map((item) => (
                       <tr key={item.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-4 py-3 whitespace-nowrap text-[11px] sm:text-xs md:text-sm text-gray-900">{item.serial_no ?? "N/A"}</td>
@@ -686,7 +686,7 @@ export default function CottonInstituteDashboard() {
         )}
 
         {!department && !land && !hr && (!labEquipment || labEquipment.length === 0) && (!farmMachinery || farmMachinery.length === 0) && (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center text-gray-600">No data available at this time.</div>
+          <div className="panel-card rounded-xl shadow-lg p-8 text-center text-gray-600">No data available at this time.</div>
         )}
       </main>
     </div>

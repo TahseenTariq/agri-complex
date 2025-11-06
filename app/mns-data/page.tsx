@@ -272,7 +272,7 @@ const renderPieVisualization = (
 
 // Skeleton Components
 const SkeletonCard = memo(() => (
-  <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
+  <div className="panel-card-soft rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
     <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
     <div className="space-y-3">
       <div className="h-4 bg-gray-200 rounded w-full"></div>
@@ -284,7 +284,7 @@ const SkeletonCard = memo(() => (
 SkeletonCard.displayName = "SkeletonCard";
 
 const SkeletonTable = memo(() => (
-  <div className="bg-white rounded-xl shadow-lg p-6 animate-pulse overflow-hidden">
+  <div className="panel-card-soft rounded-xl shadow-lg p-6 animate-pulse overflow-hidden">
     <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
     <div className="space-y-3">
       <div className="h-10 bg-gray-200 rounded"></div>
@@ -329,7 +329,7 @@ const DataTable = memo(({
 }) => {
   if (!data || data.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+      <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
         <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
           <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -342,7 +342,7 @@ const DataTable = memo(({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
+    <div className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
       <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2 pb-2 border-b border-gray-200 flex-wrap">
         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -366,7 +366,7 @@ const DataTable = memo(({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="table-surface divide-y divide-gray-200">
                   {data.map((row, idx) => (
                     <tr key={idx} className="hover:bg-blue-50 transition-colors">
                       {columns.map((col) => (
@@ -744,7 +744,7 @@ export default function MnsDataPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-app-surface">
         <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
             <div className="flex items-center justify-between h-full">
@@ -774,7 +774,7 @@ export default function MnsDataPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-app-surface">
       {/* Header Section */}
       <header className="bg-white shadow-lg rounded-b-xl sticky top-0 z-50 h-[1.3in]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full">
@@ -953,7 +953,7 @@ export default function MnsDataPage() {
               />
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+            <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Building Details</h3>
               <p className="text-gray-500 text-sm">No data available</p>
             </div>
@@ -972,7 +972,7 @@ export default function MnsDataPage() {
               />
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+            <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Farm Machinery</h3>
               <p className="text-gray-500 text-sm">No data available</p>
             </div>
@@ -986,7 +986,7 @@ export default function MnsDataPage() {
               columns={labMachineryColumns}
             />
           ) : (
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+            <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Lab Machinery</h3>
               <p className="text-gray-500 text-sm">No data available</p>
             </div>
@@ -1000,7 +1000,7 @@ export default function MnsDataPage() {
               columns={humanResourcesColumns}
             />
           ) : (
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+            <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Human Resources</h3>
               <p className="text-gray-500 text-sm">No data available</p>
             </div>
@@ -1019,7 +1019,7 @@ export default function MnsDataPage() {
               />
             </div>
           ) : (
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+            <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Hand Boring Plants</h3>
               <p className="text-gray-500 text-sm">No data available</p>
             </div>
@@ -1033,7 +1033,7 @@ export default function MnsDataPage() {
               columns={powerDrillingRigsColumns}
             />
           ) : (
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+            <div className="panel-card rounded-xl shadow-lg p-6 sm:p-8">
               <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Power Drilling Rigs</h3>
               <p className="text-gray-500 text-sm">No data available</p>
             </div>
