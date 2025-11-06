@@ -1,20 +1,7 @@
 "use client";
 import { supabase } from "@/lib/supabase-client";
-import { useEffect, useState, useMemo, lazy, Suspense, memo } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-
-// Lazy load charts to improve initial load time
-const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
-const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
-const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
-const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
-const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
-const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
-const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
-const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
-const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
 
 interface Department {
   id: string;
@@ -88,15 +75,6 @@ const SkeletonSummaryCard = memo(() => (
 ));
 SkeletonSummaryCard.displayName = "SkeletonSummaryCard";
 
-// Chart Skeleton
-const ChartSkeleton = memo(() => (
-  <div className="bg-gray-50 rounded-lg p-4 animate-pulse">
-    <div className="h-5 bg-gray-200 rounded w-32 mx-auto mb-4"></div>
-    <div className="h-48 bg-gray-200 rounded"></div>
-  </div>
-));
-ChartSkeleton.displayName = "ChartSkeleton";
-
 // Table Skeleton
 const TableSkeleton = memo(() => (
   <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 animate-pulse">
@@ -118,15 +96,12 @@ export default function CottonInstituteDashboard() {
   const [labEquipment, setLabEquipment] = useState<LabEquipment[]>([]);
   const [farmMachinery, setFarmMachinery] = useState<FarmMachinery[]>([]);
   const [loading, setLoading] = useState(true);
-  const [chartsLoaded, setChartsLoaded] = useState(false);
 
-  // Optimized parallel data fetching
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       
       try {
-        // Fetch department first (needed for other queries)
         const { data: dept } = await supabase
           .from("departments")
           .select("id, department_name, focal_person_name, designation, address, telephone, email")
@@ -140,7 +115,6 @@ export default function CottonInstituteDashboard() {
 
         setDepartment(dept);
 
-        // Fetch all remaining data in parallel using Promise.all
         const [landResult, hrResult, labResult, farmResult] = await Promise.all([
           supabase
             .from("cri_land_building")
@@ -166,9 +140,6 @@ export default function CottonInstituteDashboard() {
         setHr(hrResult.data);
         setLabEquipment(labResult.data || []);
         setFarmMachinery(farmResult.data || []);
-
-        // Load charts after data is ready
-        setTimeout(() => setChartsLoaded(true), 100);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -201,121 +172,6 @@ export default function CottonInstituteDashboard() {
       nonFunctionalFarmMachinery,
     };
   }, [labEquipment, farmMachinery]);
-
-  // Vibrant color palettes
-  const landColors = ["#10b981", "#14b8a6", "#06b6d4", "#3b82f6"]; // Green, Teal, Cyan, Blue
-  const hrColors = ["#a855f7", "#ec4899", "#06b6d4", "#8b5cf6"]; // Purple, Pink, Cyan, Violet
-  const equipmentColors = ["#f59e0b", "#ef4444", "#f97316", "#fbbf24"]; // Orange, Red, Orange-red, Gold
-  const machineryColors = ["#f97316", "#ef4444", "#fbbf24", "#dc2626"]; // Orange, Red, Gold, Dark Red
-
-  // Vibrant color palette for pie charts - predefined array for unique color assignment
-  const PIE_CHART_COLORS = [
-    '#4F46E5', // Indigo
-    '#22C55E', // Emerald Green (Functional)
-    '#F59E0B', // Amber
-    '#EC4899', // Pink
-    '#06B6D4', // Cyan
-    '#8B5CF6', // Purple
-    '#10B981', // Green
-    '#F43F5E', // Rose
-  ];
-
-  // Status colors for Functional/Non-Functional items
-  const FUNCTIONAL_COLOR = '#22C55E'; // Vibrant green
-  const NON_FUNCTIONAL_COLOR = '#EF4444'; // Bright red
-
-  // Memoize chart data - colors will be assigned by index in the chart rendering
-  const chartData = useMemo(() => {
-    const landDistributionData = land
-      ? [
-          { name: "Functional", value: Number(land.area_under_cultivation) || 0, index: 0 },
-          { name: "Non-Functional", value: (Number(land.area_under_buildings) || 0) + (Number(land.area_under_roads) || 0), index: 1 },
-        ]
-      : [];
-
-    const labEquipmentStatusData = [
-      { name: "Functional", value: summaryStats.functionalLabEquipment, index: 0 },
-      { name: "Non-Functional", value: summaryStats.nonFunctionalLabEquipment, index: 1 },
-    ];
-
-    const farmMachineryStatusData = [
-      { name: "Functional", value: summaryStats.functionalFarmMachinery, index: 0 },
-      { name: "Non-Functional", value: summaryStats.nonFunctionalFarmMachinery, index: 1 },
-    ];
-
-    // Human Resources bar chart data with vibrant colors
-    const hrBarData = hr
-      ? [
-          { name: "Officers", value: hr.total_officers || 0, color: "#4CAF50", gradient: "from-green-400 to-green-600" },
-          { name: "Field Staff", value: hr.officials_and_field_staff || 0, color: "#2196F3", gradient: "from-blue-400 to-blue-600" },
-          { name: "Vacant", value: hr.vacant_for_officers || 0, color: "#FF9800", gradient: "from-orange-400 to-orange-600" },
-        ]
-      : [];
-
-    return { landDistributionData, labEquipmentStatusData, farmMachineryStatusData, hrBarData };
-  }, [land, summaryStats, hr]);
-
-  // Custom tooltip components for each chart type
-  const LandTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const entry = chartData.landDistributionData.find(item => item.name === payload[0].name);
-      // Assign color based on Functional/Non-Functional
-      const color = entry?.name === "Functional" ? '#16a34a' : '#dc2626'; // green-600 and red-600
-      
-      return (
-        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
-          <p className="font-semibold text-gray-900 mb-1">{payload[0].name}</p>
-          <p className="text-sm" style={{ color: color }}>
-            <span className="font-bold">{payload[0].value}</span>
-            {payload[0].payload?.percent && (
-              <span className="text-gray-600 ml-2">({(payload[0].payload.percent * 100).toFixed(1)}%)</span>
-            )}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const LabEquipmentTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const name = payload[0].name;
-      const color = name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-      
-      return (
-        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
-          <p className="font-semibold text-gray-900 mb-1">{name}</p>
-          <p className="text-sm" style={{ color: color }}>
-            <span className="font-bold">{payload[0].value}</span>
-            {payload[0].payload?.percent && (
-              <span className="text-gray-600 ml-2">({(payload[0].payload.percent * 100).toFixed(1)}%)</span>
-            )}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  const FarmMachineryTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const name = payload[0].name;
-      const color = name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-      
-      return (
-        <div className="bg-white p-3 rounded-lg shadow-xl border border-gray-200">
-          <p className="font-semibold text-gray-900 mb-1">{name}</p>
-          <p className="text-sm" style={{ color: color }}>
-            <span className="font-bold">{payload[0].value}</span>
-            {payload[0].payload?.percent && (
-              <span className="text-gray-600 ml-2">({(payload[0].payload.percent * 100).toFixed(1)}%)</span>
-            )}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   if (loading) {
     return (
@@ -468,35 +324,40 @@ export default function CottonInstituteDashboard() {
 
           {/* Department Information Card */}
           {department && (
-            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
-                <div className="bg-blue-100 rounded-lg p-2 flex-shrink-0">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-3 sm:p-5 md:p-6 mb-6 sm:mb-8 border border-blue-100">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-3 sm:mb-5 flex items-center gap-2">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span>Department Information</span>
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5">
+                <div className="space-y-2.5">
+                  <div>
+                    <p className="text-[11px] sm:text-xs text-gray-500 uppercase tracking-wide mb-1">Department Name</p>
+                    <p className="text-sm sm:text-base font-medium text-gray-900">{department.department_name || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] sm:text-xs text-gray-500 uppercase tracking-wide mb-1">Focal Person</p>
+                    <p className="text-sm sm:text-base text-gray-700">{department.focal_person_name || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] sm:text-xs text-gray-500 uppercase tracking-wide mb-1">Designation</p>
+                    <p className="text-sm sm:text-base text-gray-700">{department.designation || "N/A"}</p>
+                  </div>
                 </div>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Department Information</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-                <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <p className="text-sm text-gray-600 mb-1">Focal Person</p>
-                  <p className="text-base sm:text-lg font-medium text-gray-900">{department.focal_person_name || "N/A"}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <p className="text-sm text-gray-600 mb-1">Designation</p>
-                  <p className="text-base sm:text-lg font-medium text-gray-900">{department.designation || "N/A"}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <p className="text-sm text-gray-600 mb-1">Address</p>
-                  <p className="text-base sm:text-lg font-medium text-gray-900">{department.address || "N/A"}</p>
-                </div>
-                <div className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <p className="text-sm text-gray-600 mb-1">Telephone</p>
-                  <p className="text-base sm:text-lg font-medium text-gray-900">{department.telephone || "N/A"}</p>
-                </div>
-                <div className="md:col-span-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <p className="text-sm text-gray-600 mb-1">Email</p>
-                  <p className="text-base sm:text-lg font-medium text-gray-900">{department.email || "N/A"}</p>
+                <div className="space-y-2.5">
+                  <div>
+                    <p className="text-[11px] sm:text-xs text-gray-500 uppercase tracking-wide mb-1">Address</p>
+                    <p className="text-sm sm:text-base text-gray-700">{department.address || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] sm:text-xs text-gray-500 uppercase tracking-wide mb-1">Contact</p>
+                    <div className="space-y-1">
+                      <p className="text-sm sm:text-base text-gray-700">📞 {department.telephone || "N/A"}</p>
+                      <p className="text-sm sm:text-base text-gray-700">✉️ {department.email || "N/A"}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -516,72 +377,9 @@ export default function CottonInstituteDashboard() {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
                 {/* Chart Section */}
-                {chartsLoaded && chartData.landDistributionData.length > 0 ? (
-                  <div className="bg-gradient-to-br from-emerald-50 via-indigo-50 to-cyan-50 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
-                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Area Distribution</h3>
-                    <Suspense fallback={<ChartSkeleton />}>
-                      <ResponsiveContainer width="100%" height={280}>
-                        <PieChart>
-                          <defs>
-                            {chartData.landDistributionData.map((entry, index) => {
-                              // Assign color based on Functional/Non-Functional
-                              const color = entry.name === "Functional" ? '#16a34a' : '#dc2626'; // green-600 and red-600
-                              return (
-                                <linearGradient key={`gradient-${index}`} id={`landGradient${index}`} x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor={color} stopOpacity={1} />
-                                  <stop offset="50%" stopColor={color} stopOpacity={0.85} />
-                                  <stop offset="100%" stopColor={color} stopOpacity={0.7} />
-                                </linearGradient>
-                              );
-                            })}
-                          </defs>
-                          <Pie
-                            data={chartData.landDistributionData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, percent }: any) => `${name}\n${(percent * 100).toFixed(0)}%`}
-                            outerRadius={115}
-                            innerRadius={55}
-                            fill="#16a34a"
-                            dataKey="value"
-                            animationBegin={0}
-                            animationDuration={800}
-                            stroke="white"
-                            strokeWidth={3}
-                          >
-                            {chartData.landDistributionData.map((entry, index) => {
-                              // Assign color based on Functional/Non-Functional
-                              const color = entry.name === "Functional" ? '#16a34a' : '#dc2626'; // green-600 and red-600
-                              return (
-                                <Cell 
-                                  key={`cell-${index}`} 
-                                  fill={`url(#landGradient${index})`}
-                                  style={{ 
-                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
-                                    transition: 'all 0.3s ease',
-                                    cursor: 'pointer'
-                                  }}
-                                  onMouseEnter={(e: any) => {
-                                    e.target.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))';
-                                    e.target.style.opacity = '0.95';
-                                  }}
-                                  onMouseLeave={(e: any) => {
-                                    e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))';
-                                    e.target.style.opacity = '1';
-                                  }}
-                                />
-                              );
-                            })}
-                          </Pie>
-                          <Tooltip content={<LandTooltip />} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </Suspense>
-                  </div>
-                ) : (
-                  <ChartSkeleton />
-                )}
+                <div className="bg-gradient-to-br from-emerald-50 via-indigo-50 to-cyan-50 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Area Distribution</h3>
+                </div>
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -630,65 +428,7 @@ export default function CottonInstituteDashboard() {
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Human Resources</h2>
         </div>
 
-              {/* Bar Chart */}
-              {chartsLoaded && chartData.hrBarData.length > 0 && chartData.hrBarData.some(item => item.value > 0) ? (
-                <div className="mb-4 sm:mb-6 bg-gradient-to-br from-green-50 via-blue-50 to-orange-50 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
-                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Resource Breakdown</h3>
-                  <Suspense fallback={<ChartSkeleton />}>
-                    <ResponsiveContainer width="100%" height={250}>
-                      <BarChart data={chartData.hrBarData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                        <defs>
-                          {chartData.hrBarData.map((entry, index) => (
-                            <linearGradient key={`hrGradient-${index}`} id={`hrGradient${index}`} x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor={entry.color} stopOpacity={0.95} />
-                              <stop offset="50%" stopColor={entry.color} stopOpacity={0.8} />
-                              <stop offset="100%" stopColor={entry.color} stopOpacity={0.6} />
-                            </linearGradient>
-                          ))}
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
-                        <XAxis 
-                          dataKey="name" 
-                          tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 600 }}
-                          axisLine={{ stroke: '#d1d5db' }}
-                        />
-                        <YAxis 
-                          tick={{ fill: '#6b7280', fontSize: 12 }}
-                          axisLine={{ stroke: '#d1d5db' }}
-                        />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'white', 
-                            border: '1px solid #e5e7eb', 
-                            borderRadius: '8px',
-                            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                            padding: '12px'
-                          }}
-                          labelStyle={{ fontWeight: 600, color: '#1f2937' }}
-                          formatter={(value: any) => [value, '']}
-                        />
-                        <Bar 
-                          dataKey="value" 
-                          radius={[10, 10, 0, 0]}
-                          animationDuration={800}
-                          animationBegin={0}
-                        >
-                          {chartData.hrBarData.map((entry, index) => (
-                            <Cell 
-                              key={`bar-${index}`} 
-                              fill={`url(#hrGradient${index})`}
-                              style={{ 
-                                filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15))',
-                                transition: 'all 0.3s ease'
-                              }}
-                            />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </Suspense>
-                </div>
-              ) : null}
+              {/* Chart removed */}
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 <div className="p-5 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200 hover:shadow-lg transition-all transform hover:scale-105">
@@ -719,90 +459,7 @@ export default function CottonInstituteDashboard() {
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Laboratory Equipment</h2>
           </div>
 
-              {/* Status Chart */}
-              {chartsLoaded && chartData.labEquipmentStatusData.some((item) => item.value > 0) ? (
-                <div className="mb-4 sm:mb-6 bg-gradient-to-br from-green-50 via-red-50 to-green-50 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
-                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Equipment Status</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                    <Suspense fallback={<ChartSkeleton />}>
-                      <ResponsiveContainer width="100%" height={250}>
-                        <PieChart>
-                          <defs>
-                            {chartData.labEquipmentStatusData.map((entry, index) => {
-                              // Use green for Functional, red for Non-Functional
-                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-                              return (
-                                <linearGradient key={`equipGradient-${index}`} id={`equipGradient${index}`} x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor={color} stopOpacity={1} />
-                                  <stop offset="50%" stopColor={color} stopOpacity={0.85} />
-                                  <stop offset="100%" stopColor={color} stopOpacity={0.7} />
-                                </linearGradient>
-                              );
-                            })}
-                          </defs>
-                          <Pie
-                            data={chartData.labEquipmentStatusData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, value, percent }: any) => `${name}\n${value} (${(percent * 100).toFixed(0)}%)`}
-                            outerRadius={85}
-                            innerRadius={40}
-                            fill="#8884d8"
-                            dataKey="value"
-                            animationBegin={0}
-                            animationDuration={800}
-                            stroke="white"
-                            strokeWidth={3}
-                          >
-                            {chartData.labEquipmentStatusData.map((entry, index) => {
-                              // Use green for Functional, red for Non-Functional
-                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-                              return (
-                                <Cell 
-                                  key={`cell-${index}`} 
-                                  fill={`url(#equipGradient${index})`}
-                                  style={{ 
-                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
-                                    transition: 'all 0.3s ease',
-                                    cursor: 'pointer'
-                                  }}
-                                  onMouseEnter={(e: any) => {
-                                    e.target.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))';
-                                    e.target.style.opacity = '0.95';
-                                  }}
-                                  onMouseLeave={(e: any) => {
-                                    e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))';
-                                    e.target.style.opacity = '1';
-                                  }}
-                                />
-                              );
-                            })}
-                          </Pie>
-                          <Tooltip content={<LabEquipmentTooltip />} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </Suspense>
-                    <div className="flex flex-col justify-center gap-4">
-                      {chartData.labEquipmentStatusData.map((item, index) => {
-                        // Use green for Functional, red for Non-Functional
-                        const color = item.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-                        return (
-                          <div key={index} className="flex items-center gap-4 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                            <div className="w-6 h-6 rounded-full shadow-sm" style={{ backgroundColor: color }}></div>
-                            <div className="flex-1">
-                              <span className="text-sm font-medium text-gray-700">{item.name}:</span>
-                              <span className="text-xl font-bold text-gray-900 ml-2">{item.value}</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : chartData.labEquipmentStatusData.some((item) => item.value > 0) ? (
-                <ChartSkeleton />
-              ) : null}
+              {/* Status Chart removed */}
 
               <div className="overflow-x-auto -mx-4 sm:-mx-6 md:mx-0">
                 <div className="inline-block min-w-full align-middle">
@@ -868,90 +525,7 @@ export default function CottonInstituteDashboard() {
                 <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Farm Machinery</h2>
         </div>
 
-              {/* Status Chart */}
-              {chartsLoaded && chartData.farmMachineryStatusData.some((item) => item.value > 0) ? (
-                <div className="mb-4 sm:mb-6 bg-gradient-to-br from-green-50 via-red-50 to-green-50 rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
-                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">Machinery Status</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                    <Suspense fallback={<ChartSkeleton />}>
-                      <ResponsiveContainer width="100%" height={250}>
-                        <PieChart>
-                          <defs>
-                            {chartData.farmMachineryStatusData.map((entry, index) => {
-                              // Use green for Functional, red for Non-Functional
-                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-                              return (
-                                <linearGradient key={`machGradient-${index}`} id={`machGradient${index}`} x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor={color} stopOpacity={1} />
-                                  <stop offset="50%" stopColor={color} stopOpacity={0.85} />
-                                  <stop offset="100%" stopColor={color} stopOpacity={0.7} />
-                                </linearGradient>
-                              );
-                            })}
-                          </defs>
-                          <Pie
-                            data={chartData.farmMachineryStatusData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, value, percent }: any) => `${name}\n${value} (${(percent * 100).toFixed(0)}%)`}
-                            outerRadius={85}
-                            innerRadius={40}
-                            fill="#8884d8"
-                            dataKey="value"
-                            animationBegin={0}
-                            animationDuration={800}
-                            stroke="white"
-                            strokeWidth={3}
-                          >
-                            {chartData.farmMachineryStatusData.map((entry, index) => {
-                              // Use green for Functional, red for Non-Functional
-                              const color = entry.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-                              return (
-                                <Cell 
-                                  key={`cell-${index}`} 
-                                  fill={`url(#machGradient${index})`}
-                                  style={{ 
-                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))',
-                                    transition: 'all 0.3s ease',
-                                    cursor: 'pointer'
-                                  }}
-                                  onMouseEnter={(e: any) => {
-                                    e.target.style.filter = 'drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))';
-                                    e.target.style.opacity = '0.95';
-                                  }}
-                                  onMouseLeave={(e: any) => {
-                                    e.target.style.filter = 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))';
-                                    e.target.style.opacity = '1';
-                                  }}
-                                />
-                              );
-                            })}
-                          </Pie>
-                          <Tooltip content={<FarmMachineryTooltip />} />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </Suspense>
-                    <div className="flex flex-col justify-center gap-4">
-                      {chartData.farmMachineryStatusData.map((item, index) => {
-                        // Use green for Functional, red for Non-Functional
-                        const color = item.name === "Functional" ? FUNCTIONAL_COLOR : NON_FUNCTIONAL_COLOR;
-                        return (
-                          <div key={index} className="flex items-center gap-4 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                            <div className="w-6 h-6 rounded-full shadow-sm" style={{ backgroundColor: color }}></div>
-                <div className="flex-1">
-                              <span className="text-sm font-medium text-gray-700">{item.name}:</span>
-                              <span className="text-xl font-bold text-gray-900 ml-2">{item.value}</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : chartData.farmMachineryStatusData.some((item) => item.value > 0) ? (
-                <ChartSkeleton />
-              ) : null}
+              {/* Status Chart removed */}
 
               <div className="overflow-x-auto -mx-4 sm:-mx-6 md:mx-0">
                 <div className="inline-block min-w-full align-middle">
