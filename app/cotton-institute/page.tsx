@@ -626,7 +626,6 @@ export default function CottonInstituteDashboard() {
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider">Serial No</th>
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider">Equipment Name</th>
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider hidden sm:table-cell">Model/Specification</th>
-                      <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider hidden md:table-cell">Department</th>
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider">Quantity</th>
                       <th className="px-4 py-3 text-left text-[11px] sm:text-xs md:text-sm font-bold text-gray-800 uppercase tracking-wider">Status</th>
                     </tr>
@@ -637,7 +636,6 @@ export default function CottonInstituteDashboard() {
                         <td className="px-4 py-3 whitespace-nowrap text-[11px] sm:text-xs md:text-sm text-gray-900">{item.serial_no ?? "N/A"}</td>
                         <td className="px-4 py-3 text-[11px] sm:text-xs md:text-sm text-gray-900">{item.equipment_name || "N/A"}</td>
                         <td className="px-4 py-3 text-[11px] sm:text-xs md:text-sm text-gray-600 hidden sm:table-cell">{item.model_specification || "N/A"}</td>
-                        <td className="px-4 py-3 text-[11px] sm:text-xs md:text-sm text-gray-600 hidden md:table-cell">{item.department || "N/A"}</td>
                         <td className="px-4 py-3 whitespace-nowrap text-[11px] sm:text-xs md:text-sm text-gray-900">{item.quantity ?? "N/A"}</td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <span

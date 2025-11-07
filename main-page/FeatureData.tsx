@@ -72,7 +72,7 @@ const cottons: Cotton[] = [
   {
     id: 10,
     name: "AMRI",
-    image: "/amri.jpg.jpg",
+    image: "/amri.jpg.jpeg",
     imageAlt: "AMRI",
   },
 ];
