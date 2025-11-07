@@ -2,6 +2,7 @@
 import { supabase } from "@/lib/supabase-client";
 import { useEffect, useState, useMemo, Suspense, memo } from "react";
 import type { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
+import type { PieLabelRenderProps } from "recharts/types/polar/Pie";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
@@ -102,29 +103,74 @@ const ChartSkeleton = memo(() => (
 ));
 ChartSkeleton.displayName = "ChartSkeleton";
 
-const baseGradients = [
-  { start: "#2563EB", end: "#60A5FA" },
-  { start: "#22C55E", end: "#86EFAC" },
-  { start: "#F97316", end: "#FDBA74" },
-  { start: "#8B5CF6", end: "#C4B5FD" },
-  { start: "#F43F5E", end: "#FDA4AF" },
-  { start: "#0EA5E9", end: "#67E8F9" },
-  { start: "#EC4899", end: "#F9A8D4" },
-  { start: "#14B8A6", end: "#5EEAD4" },
-  { start: "#F59E0B", end: "#FCD34D" },
-  { start: "#6366F1", end: "#A5B4FC" },
+const cottonPalette = [
+  "#2563EB",
+  "#11a9ff",
+  "#14B8A6",
+  "#22C55E",
+  "#8B5CF6",
+  "#F97316",
+  "#ec4899",
+  "#F43F5E",
+  "#0EA5E9",
+  "#6366F1",
+  "#F59E0B",
+  "#7C3AED",
+  "#10B981",
 ];
 
-const resolveGradient = (name: string | undefined, index: number) => {
-  return baseGradients[index % baseGradients.length];
+const getSliceColor = (index: number) => cottonPalette[index % cottonPalette.length];
+
+const RADIAN = Math.PI / 180;
+
+const renderValueLabel = (props: PieLabelRenderProps) => {
+  const {
+    cx = 0,
+    cy = 0,
+    midAngle = 0,
+    innerRadius = 0,
+    outerRadius = 0,
+    value = 0,
+    name,
+  } = props;
+
+  const numericCx = typeof cx === "number" ? cx : Number(cx ?? 0);
+  const numericCy = typeof cy === "number" ? cy : Number(cy ?? 0);
+  const numericMidAngle = typeof midAngle === "number" ? midAngle : Number(midAngle ?? 0);
+  const numericInnerRadius = typeof innerRadius === "number" ? innerRadius : Number(innerRadius ?? 0);
+  const numericOuterRadius = typeof outerRadius === "number" ? outerRadius : Number(outerRadius ?? 0);
+  const numericValue = typeof value === "number" ? value : Number(value ?? 0);
+
+  const label = formatLabel(name, Number.isFinite(numericValue) ? numericValue : undefined);
+  if (!label) return null;
+
+  const radius = numericInnerRadius + (numericOuterRadius - numericInnerRadius) * 1.08;
+  const x = numericCx + radius * Math.cos(-numericMidAngle * RADIAN);
+  const y = numericCy + radius * Math.sin(-numericMidAngle * RADIAN);
+  const isRightSide = x > numericCx;
+  const textOffset = isRightSide ? 22 : -22;
+
+  return (
+    <text
+      x={x + textOffset}
+      y={y}
+      fill="#1f2937"
+      fontSize={12}
+      fontWeight={600}
+      textAnchor={isRightSide ? "start" : "end"}
+      dominantBaseline="middle"
+    >
+      {label}
+    </text>
+  );
 };
 
 const tooltipFormatter = (value: ValueType, name: NameType): [string, string] => [String(value ?? ""), String(name ?? "")];
 
-const formatLabel = (name: string | undefined, percent?: number) => {
+const formatLabel = (name: string | undefined, absolute?: number) => {
   const safeName = name ?? "";
-  const safePercent = typeof percent === "number" ? (percent * 100).toFixed(0) : "";
-  return safePercent ? `${safeName} ${safePercent}%` : safeName;
+  const safeValue = typeof absolute === "number" && Number.isFinite(absolute) ? absolute : undefined;
+  return typeof safeValue === "number" ? `${safeName} ${safeValue}` : safeName;
 };
 
 type PieDatum = { name: string; value: number };
@@ -144,55 +190,44 @@ const renderPieVisualization = (
       <>
         <ResponsiveContainer width="100%" height={chartHeight}>
           <PieChart>
-            <defs>
-              {data.map((slice, index) => {
-                const { start, end } = resolveGradient(slice.name, index);
-                const gradientId = `${gradientPrefix}-grad-${index}`;
-                return (
-                  <linearGradient key={gradientId} id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={start} stopOpacity={0.95} />
-                    <stop offset="55%" stopColor={start} stopOpacity={0.8} />
-                    <stop offset="100%" stopColor={end} stopOpacity={0.65} />
-                  </linearGradient>
-                );
-              })}
-            </defs>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              outerRadius={130}
-              innerRadius={60}
+              outerRadius={110}
+              innerRadius={40}
               dataKey="value"
               paddingAngle={2}
               stroke="white"
               strokeWidth={3}
-              label={({ name, percent }: { name?: string; percent?: number }) =>
-                formatLabel(name, typeof percent === "number" ? percent : undefined)
-              }
+              labelLine
+              label={renderValueLabel}
             >
-              {data.map((slice, index) => (
-                <Cell
-                  key={`${gradientPrefix}-slice-${slice.name}`}
-                  fill={`url(#${gradientPrefix}-grad-${index})`}
-                  style={{
-                    filter: "drop-shadow(0 8px 16px rgba(15, 23, 42, 0.18))",
-                    transition: "transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease",
-                  }}
-                  onMouseEnter={(event) => {
-                    const target = event.currentTarget as SVGElement;
-                    target.style.transform = "scale(1.05)";
-                    target.style.filter = "drop-shadow(0 16px 26px rgba(15, 23, 42, 0.28))";
-                    target.style.opacity = "0.95";
-                  }}
-                  onMouseLeave={(event) => {
-                    const target = event.currentTarget as SVGElement;
-                    target.style.transform = "scale(1)";
-                    target.style.filter = "drop-shadow(0 8px 16px rgba(15, 23, 42, 0.18))";
-                    target.style.opacity = "1";
-                  }}
-                />
-              ))}
+              {data.map((slice, index) => {
+                const fillColor = getSliceColor(index);
+                return (
+                  <Cell
+                    key={`${gradientPrefix}-slice-${slice.name}`}
+                    fill={fillColor}
+                    style={{
+                      filter: "drop-shadow(0 8px 16px rgba(22, 67, 174, 0.18))",
+                      transition: "transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease",
+                    }}
+                    onMouseEnter={(event) => {
+                      const target = event.currentTarget as SVGElement;
+                      target.style.transform = "scale(1.05)";
+                      target.style.filter = "drop-shadow(0 16px 26px rgba(15, 23, 42, 0.28))";
+                      target.style.opacity = "0.95";
+                    }}
+                    onMouseLeave={(event) => {
+                      const target = event.currentTarget as SVGElement;
+                      target.style.transform = "scale(1)";
+                      target.style.filter = "drop-shadow(0 8px 16px rgba(15, 23, 42, 0.18))";
+                      target.style.opacity = "1";
+                    }}
+                  />
+                );
+              })}
             </Pie>
             <Tooltip
               formatter={tooltipFormatter}
@@ -209,12 +244,12 @@ const renderPieVisualization = (
         </ResponsiveContainer>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm text-gray-600">
           {data.map((slice, index) => {
-            const { start, end } = resolveGradient(slice.name, index);
+            const fillColor = getSliceColor(index);
             return (
               <div key={`${gradientPrefix}-legend-${slice.name}`} className="flex items-center gap-2">
                 <span
                   className="w-3 h-3 rounded-full"
-                  style={{ background: `linear-gradient(135deg, ${start} 0%, ${end} 100%)` }}
+                  style={{ background: fillColor }}
                 />
                 <span className="font-medium">{slice.name}</span>
               </div>
