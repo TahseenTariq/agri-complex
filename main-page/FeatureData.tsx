@@ -71,9 +71,9 @@ const cottons: Cotton[] = [
   },
   {
     id: 10,
-    name: "AMRI",
+    name: "Agricultural Mechanization Research Institute",
     image: "/amri.jpg.jpeg",
-    imageAlt: "AMRI",
+    imageAlt: "Agricultural Mechanization Research Institute",
   },
 ];
 
