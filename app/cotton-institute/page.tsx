@@ -108,15 +108,6 @@ const cottonPalette = [
   "#11a9ff",
   "#14B8A6",
   "#22C55E",
-  "#8B5CF6",
-  "#F97316",
-  "#ec4899",
-  "#F43F5E",
-  "#0EA5E9",
-  "#6366F1",
-  "#F59E0B",
-  "#7C3AED",
-  "#10B981",
 ];
 
 const getSliceColor = (index: number) => cottonPalette[index % cottonPalette.length];
@@ -148,15 +139,15 @@ const renderValueLabel = (props: PieLabelRenderProps) => {
   const x = numericCx + radius * Math.cos(-numericMidAngle * RADIAN);
   const y = numericCy + radius * Math.sin(-numericMidAngle * RADIAN);
   const isRightSide = x > numericCx;
-  const textOffset = isRightSide ? 22 : -22;
+  const textOffset = isRightSide ? 28 : -28;
 
   return (
     <text
       x={x + textOffset}
       y={y}
-      fill="#1f2937"
-      fontSize={12}
-      fontWeight={600}
+      fill="#2a0f21"
+      fontSize={16}
+      fontWeight={700}
       textAnchor={isRightSide ? "start" : "end"}
       dominantBaseline="middle"
     >

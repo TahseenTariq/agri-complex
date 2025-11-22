@@ -8,6 +8,7 @@ interface Cotton {
   name: string;
   image: string;
   imageAlt: string;
+  locked?: boolean;
 }
 
 // Research institutes data - easily replaceable
@@ -53,7 +54,7 @@ const cottons: Cotton[] = [
   },
   {
     id: 7,
-    name: "Pesticides Labs",
+    name: "Pesticides Quality Control Lab",
     image: "/lab.jpg.jpg",
     imageAlt: "Pesticides Labs",
   },
@@ -87,7 +88,8 @@ export default function FeatureData() {
       // Navigate to MNS Lab / MNS Data page - force full page navigation
       window.location.href = "/mns-data";
     } else {
-      console.log("Coming Soon");
+      // Navigate to soil-institute page for all other items
+      router.push(`/soil-institute/${cottonId}`);
     }
   };
 
@@ -112,24 +114,45 @@ export default function FeatureData() {
               <div 
                 className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 bg-gray-50 overflow-hidden"
               >
-                <Image
-                  src={cotton.image}
-                  alt={cotton.imageAlt}
-                  fill
-                  className="object-cover w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-105"
-                  unoptimized
-                  onError={(e: any) => {
-                    // Fallback to placeholder if image fails to load
-                    e.target.style.display = 'none';
-                    const placeholder = e.target.parentElement?.querySelector('.placeholder');
-                    if (placeholder) {
-                      (placeholder as HTMLElement).style.display = 'flex';
-                    }
-                  }}
-                />
-                <div className="placeholder absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-200 border-2 border-blue-300 flex items-center justify-center shadow-sm hidden">
-                  <span className="text-blue-600 text-xs sm:text-sm font-semibold">Image</span>
-                </div>
+                {cotton.locked ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-slate-200/80 text-slate-600">
+                    <svg
+                      className="w-12 h-12 text-slate-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.8}
+                        d="M16 11V7a4 4 0 10-8 0v4m12 2H6a2 2 0 00-2 2v5a2 2 0 002 2h12a2 2 0 002-2v-5a2 2 0 00-2-2z"
+                      />
+                    </svg>
+                    <p className="text-sm font-semibold uppercase tracking-wide">Locked</p>
+                  </div>
+                ) : (
+                  <>
+                    <Image
+                      src={cotton.image}
+                      alt={cotton.imageAlt}
+                      fill
+                      className="object-cover w-full h-auto rounded-lg transition-transform duration-300 group-hover:scale-105"
+                      unoptimized
+                      onError={(e: any) => {
+                        // Fallback to placeholder if image fails to load
+                        e.target.style.display = 'none';
+                        const placeholder = e.target.parentElement?.querySelector('.placeholder');
+                        if (placeholder) {
+                          (placeholder as HTMLElement).style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <div className="placeholder absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-200 border-2 border-blue-300 flex items-center justify-center shadow-sm hidden">
+                      <span className="text-blue-600 text-xs sm:text-sm font-semibold">Image</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Card Content */}
@@ -144,11 +167,18 @@ export default function FeatureData() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    handleCardClick(cotton.id, cotton.name);
+                    if (!cotton.locked) {
+                      handleCardClick(cotton.id, cotton.name);
+                    }
                   }}
-                  className="mt-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 sm:py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm sm:text-base"
+                  disabled={cotton.locked}
+                  className={`mt-auto w-full font-medium py-2 sm:py-2.5 px-4 rounded-lg transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 text-sm sm:text-base ${
+                    cotton.locked
+                      ? "bg-slate-300 text-slate-600 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700 text-white hover:scale-105 focus:ring-blue-500"
+                  }`}
                 >
-                  Learn More
+                  {cotton.locked ? "Locked" : "Learn More"}
                 </button>
               </div>
             </div>
