@@ -54,8 +54,12 @@ interface GradientStop {
   end: string;
 }
 
-// Colors: Green, Red, Blue, Brown, Yellow
-const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
+// Different color schemes for different pie charts
+const COLORS_BUILDINGS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#10b981']; // Blue-Purple-Pink scheme
+const COLORS_FARM = ['#10b981', '#14b8a6', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316']; // Green-Teal-Blue scheme
+const COLORS_HAND = ['#f97316', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899']; // Orange-Yellow-Green scheme
+const COLORS_ELECTRICITY = ['#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#3b82f6', '#10b981']; // Purple-Pink-Teal scheme
+const COLORS = COLORS_BUILDINGS; // Default fallback
 
 const chartPalettes: Record<string, GradientStop[]> = {
   buildings: [
@@ -202,10 +206,18 @@ const renderPieVisualization = (
                 }
                 labelLine={false}
               >
-                {data.map((slice, index) => (
+                {data.map((slice, index) => {
+                  // Select color scheme based on chartId
+                  let colorScheme = COLORS;
+                  if (chartId === 'buildings') colorScheme = COLORS_BUILDINGS;
+                  else if (chartId === 'farm') colorScheme = COLORS_FARM;
+                  else if (chartId === 'hand') colorScheme = COLORS_HAND;
+                  else if (chartId === 'electricity') colorScheme = COLORS_ELECTRICITY;
+                  
+                  return (
                   <Cell
                     key={`${chartId}-slice-${slice.name}-${index}`}
-                    fill={COLORS[index % COLORS.length]}
+                    fill={colorScheme[index % colorScheme.length]}
                     style={{
                       filter: "drop-shadow(0 12px 16px rgba(15, 23, 42, 0.18))",
                       transition: "transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease",
@@ -223,7 +235,8 @@ const renderPieVisualization = (
                       target.style.opacity = "1";
                     }}
                   />
-                ))}
+                  );
+                })}
               </Pie>
               <Tooltip
                 formatter={tooltipFormatterWithMode}

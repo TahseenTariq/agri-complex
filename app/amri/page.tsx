@@ -55,8 +55,8 @@ export default function AMRIPage() {
     { name: "Not Functional", value: summary.nonFunctional },
   ];
 
-  // Colors: Green and Red for comparison charts, then Blue, Brown, Yellow for others
-  const COLORS = ["#22c55e", "#ef4444", "#3b82f6", "#a16207", "#eab308"];
+  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#f4f6f9', minHeight: '100vh' }}>

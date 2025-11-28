@@ -32,8 +32,8 @@ export default function FloriculturePage() {
     { name: 'Sweeper', value: 1 },
   ];
 
-  // Colors: Green, Red, Blue, Brown, Yellow
-  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
+  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>

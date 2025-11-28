@@ -42,8 +42,10 @@ export default function SoilWaterPage() {
     { name: 'Other', value: 2 },
   ];
 
-  // Colors: Green, Red, Blue, Brown, Yellow
-  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
+  // Different color schemes for different pie charts
+  const COLORS_BUDGET = ['#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#3b82f6']; // Purple-Pink-Orange scheme
+  const COLORS_STAFF = ['#10b981', '#ef4444', '#3b82f6', '#f97316']; // Green-Red comparison scheme
+  const COLORS = COLORS_BUDGET; // Default for bar charts
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -106,7 +108,7 @@ export default function SoilWaterPage() {
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={budgetData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                    {budgetData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                    {budgetData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_BUDGET[index % COLORS_BUDGET.length]} />)}
                   </Pie>
                   <Tooltip />
                   <Legend />
@@ -168,7 +170,7 @@ export default function SoilWaterPage() {
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie data={staffData} cx="50%" cy="50%" outerRadius={80} dataKey="value">
-                    {staffData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                    {staffData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_STAFF[index % COLORS_STAFF.length]} />)}
                   </Pie>
                   <Tooltip />
                   <Legend />

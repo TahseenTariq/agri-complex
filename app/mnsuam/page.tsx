@@ -60,8 +60,12 @@ export default function MNSUAMPage() {
     { name: 'Very Large (>100)', value: 2 },
   ];
 
-  // Colors: Green, Red, Blue, Brown, Yellow
-  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
+  // Different color schemes for different pie charts
+  const COLORS_LABS = ['#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6']; // Green-Blue-Purple scheme
+  const COLORS_EQUIPMENT = ['#ef4444', '#f97316', '#eab308', '#10b981', '#3b82f6']; // Red-Orange-Yellow scheme
+  const COLORS_AGRONOMY = ['#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#3b82f6']; // Purple-Pink-Teal scheme
+  const COLORS_FACILITIES = ['#14b8a6', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899']; // Teal-Green-Blue scheme
+  const COLORS = COLORS_LABS; // Default for bar charts
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -86,7 +90,7 @@ export default function MNSUAMPage() {
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie data={labsData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                      {labsData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                      {labsData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_LABS[index % COLORS_LABS.length]} />)}
                     </Pie>
                     <Tooltip />
                     <Legend />
@@ -102,7 +106,7 @@ export default function MNSUAMPage() {
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie data={equipmentStatusData} cx="50%" cy="50%" outerRadius={80} dataKey="value">
-                      {equipmentStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                      {equipmentStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_EQUIPMENT[index % COLORS_EQUIPMENT.length]} />)}
                     </Pie>
                     <Tooltip />
                     <Legend />
@@ -161,7 +165,7 @@ export default function MNSUAMPage() {
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie data={agronomyData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                      {agronomyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                      {agronomyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_AGRONOMY[index % COLORS_AGRONOMY.length]} />)}
                     </Pie>
                     <Tooltip />
                     <Legend />
@@ -209,7 +213,7 @@ export default function MNSUAMPage() {
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie data={facilitiesData} cx="50%" cy="50%" outerRadius={80} dataKey="value">
-                      {facilitiesData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                      {facilitiesData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_FACILITIES[index % COLORS_FACILITIES.length]} />)}
                     </Pie>
                     <Tooltip />
                     <Legend />

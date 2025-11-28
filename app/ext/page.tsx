@@ -32,8 +32,10 @@ export default function ExtPage() {
     { name: 'Vacant Positions', value: 39 },
   ];
 
-  // Colors: Green, Red, Blue, Brown, Yellow
-  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
+  // Different color schemes for different pie charts
+  const COLORS_BUILDING = ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6']; // Blue-Purple-Pink scheme
+  const COLORS_VACANCY = ['#10b981', '#ef4444', '#3b82f6', '#f97316']; // Green-Red comparison scheme
+  const COLORS = COLORS_BUILDING; // Default for bar charts
 
   const vacancyRows = [
     { sNo: 1, post: 'CAO/DGA(Ext)', bs: 20, sanctioned: 0, filled: 0, vacant: 0 },
@@ -88,7 +90,7 @@ export default function ExtPage() {
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie data={buildingStatusData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                  {buildingStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                  {buildingStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_BUILDING[index % COLORS_BUILDING.length]} />)}
                 </Pie>
                 <Tooltip />
                 <Legend />
@@ -102,8 +104,8 @@ export default function ExtPage() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="sanctioned" name="Sanctioned" fill={COLORS[0]} />
-                <Bar dataKey="filled" name="Filled" fill={COLORS[1]} />
+                <Bar dataKey="sanctioned" name="Sanctioned" fill={COLORS_VACANCY[0]} />
+                <Bar dataKey="filled" name="Filled" fill={COLORS_VACANCY[1]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -112,7 +114,7 @@ export default function ExtPage() {
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie data={vacancyData} cx="50%" cy="50%" outerRadius={80} dataKey="value">
-                  {vacancyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
+                  {vacancyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_VACANCY[index % COLORS_VACANCY.length]} />)}
                 </Pie>
                 <Tooltip />
                 <Legend />
