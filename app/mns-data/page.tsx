@@ -40,10 +40,11 @@ const getTableColumns = (data: any[], excludeFields: string[] = ['id', 'departme
   return filtered;
 };
 
+import { Cell } from 'recharts';
+
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
 
 type PieDatum = { name: string; value: number };
@@ -52,6 +53,9 @@ interface GradientStop {
   start: string;
   end: string;
 }
+
+// Colors: Green, Red, Blue, Brown, Yellow
+const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
 const chartPalettes: Record<string, GradientStop[]> = {
   buildings: [
@@ -181,18 +185,6 @@ const renderPieVisualization = (
         <>
           <ResponsiveContainer width="100%" height={chartHeight}>
             <PieChart>
-              <defs>
-                {data.map((slice, index) => {
-                  const { start, end } = resolveGradient(chartId, index);
-                  return (
-                    <linearGradient key={`${chartId}-grad-${index}`} id={`${chartId}-grad-${index}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={start} stopOpacity={0.95} />
-                      <stop offset="60%" stopColor={start} stopOpacity={0.82} />
-                      <stop offset="100%" stopColor={end} stopOpacity={0.68} />
-                    </linearGradient>
-                  );
-                })}
-              </defs>
               <Pie
                 data={data}
                 cx="50%"
@@ -213,7 +205,7 @@ const renderPieVisualization = (
                 {data.map((slice, index) => (
                   <Cell
                     key={`${chartId}-slice-${slice.name}-${index}`}
-                    fill={`url(#${chartId}-grad-${index})`}
+                    fill={COLORS[index % COLORS.length]}
                     style={{
                       filter: "drop-shadow(0 12px 16px rgba(15, 23, 42, 0.18))",
                       transition: "transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease",

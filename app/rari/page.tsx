@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -29,7 +29,8 @@ export default function RARIPage() {
     { name: 'Plant Protection', value: 85 },
   ];
 
-  const COLORS = ['#8e44ad', '#9b59b6', '#af7ac5', '#c39bd3', '#d7bde2'];
+  // Colors: Green, Red, Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -48,6 +49,7 @@ export default function RARIPage() {
                   {staffData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
             <div className="stats">
@@ -58,11 +60,14 @@ export default function RARIPage() {
           <div className="card">
             <h3><i className="fas fa-seedling"></i> Research Focus Areas</h3>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={researchData}>
+              <BarChart data={researchData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
                 <YAxis domain={[0, 100]} />
                 <Tooltip formatter={(value: any) => `${value}%`} />
-                <Bar dataKey="value" fill="#8e44ad" />
+                <Bar dataKey="value" shape={(props: any) => {
+                  const { x, y, width, height, payload } = props;
+                  return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                }} />
               </BarChart>
             </ResponsiveContainer>
           </div>

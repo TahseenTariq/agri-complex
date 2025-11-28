@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -24,7 +24,8 @@ export default function MRIPage() {
     { name: 'Cultivated', value: 32 },
   ];
 
-  const COLORS = ['#3498db', '#e74c3c', '#1a237e'];
+  // Colors: Green and Red for comparison, then Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   return (
     <div style={{ background: '#eef2f7', minHeight: '100vh' }}>
@@ -91,17 +92,21 @@ export default function MRIPage() {
                   {hrData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div className="card">
             <h4 className="text-center mb-3">Land Distribution</h4>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={landData}>
+              <BarChart data={landData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" fill="#1a237e" />
+                <Bar dataKey="value" shape={(props: any) => {
+                  const { x, y, width, height, payload } = props;
+                  return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                }} />
               </BarChart>
             </ResponsiveContainer>
           </div>

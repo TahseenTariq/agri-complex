@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -42,7 +42,8 @@ export default function SoilWaterPage() {
     { name: 'Other', value: 2 },
   ];
 
-  const COLORS = ['#8b4513', '#a0522d', '#cd853f', '#deb887', '#f5deb3'];
+  // Colors: Green, Red, Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -108,17 +109,21 @@ export default function SoilWaterPage() {
                     {budgetData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                   </Pie>
                   <Tooltip />
+                  <Legend />
                 </PieChart>
               </ResponsiveContainer>
             </div>
             <div className="card">
               <h3><i className="fas fa-calendar-alt"></i> Yearly Allocation</h3>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={yearlyBudgetData}>
+                <BarChart data={yearlyBudgetData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
                   <XAxis dataKey="year" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="amount" fill="#8b4513" />
+                  <Bar dataKey="amount" shape={(props: any) => {
+                    const { x, y, width, height, payload } = props;
+                    return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                  }} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -166,6 +171,7 @@ export default function SoilWaterPage() {
                     {staffData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                   </Pie>
                   <Tooltip />
+                  <Legend />
                 </PieChart>
               </ResponsiveContainer>
               <div className="stats">
@@ -218,11 +224,14 @@ export default function SoilWaterPage() {
             <div className="card">
               <h3><i className="fas fa-tools"></i> Equipment Summary</h3>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={equipmentData}>
+                <BarChart data={equipmentData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="value" fill="#8b4513" />
+                  <Bar dataKey="value" shape={(props: any) => {
+                    const { x, y, width, height, payload } = props;
+                    return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                  }} />
                 </BarChart>
               </ResponsiveContainer>
               <div className="stats">

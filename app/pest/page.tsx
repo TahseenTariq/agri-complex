@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -28,7 +28,8 @@ export default function PestPage() {
     { name: 'Vacant Positions', value: 12 },
   ];
 
-  const COLORS = ['#3498db', '#e74c3c', '#1a5276', '#2980b9', '#5dade2', '#85c1e9', '#aed6f1'];
+  // Colors: Green and Red for comparison, then Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -55,13 +56,14 @@ export default function PestPage() {
           <div className="card">
             <h3><i className="fas fa-vial"></i> Laboratory Equipment</h3>
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={equipmentData}>
+              <BarChart data={equipmentData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value">
-                  {equipmentData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                </Bar>
+                <Bar dataKey="value" shape={(props: any) => {
+                  const { x, y, width, height, payload } = props;
+                  return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                }} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -91,6 +93,7 @@ export default function PestPage() {
                 {hrData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
               <Tooltip />
+              <Legend />
             </PieChart>
           </ResponsiveContainer>
           <table className="data-table">

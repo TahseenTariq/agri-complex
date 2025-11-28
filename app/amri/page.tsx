@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -55,8 +55,8 @@ export default function AMRIPage() {
     { name: "Not Functional", value: summary.nonFunctional },
   ];
 
-  // Chart.js default colors for pie chart
-  const COLORS = ["#36A2EB", "#FF6384"];
+  // Colors: Green and Red for comparison charts, then Blue, Brown, Yellow for others
+  const COLORS = ["#22c55e", "#ef4444", "#3b82f6", "#a16207", "#eab308"];
 
   return (
     <div style={{ background: '#f4f6f9', minHeight: '100vh' }}>
@@ -93,7 +93,6 @@ export default function AMRIPage() {
                   labelLine={false}
                   label={(entry: any) => `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`}
                   outerRadius={80}
-                  fill="#8884d8"
                   dataKey="value"
                 >
                   {pieData.map((entry, index) => (
@@ -101,6 +100,7 @@ export default function AMRIPage() {
                   ))}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -109,11 +109,14 @@ export default function AMRIPage() {
           <div className="card-chart">
             <h5 className="text-center chart-heading mb-4">Top Machinery Types</h5>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={machineryData.map(x => ({ name: x.name.substring(0, 12), qty: x.qty }))}>
+              <BarChart data={machineryData.map((x, index) => ({ name: x.name.substring(0, 12), qty: x.qty, color: COLORS[index % COLORS.length] }))}>
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="qty" fill="#36A2EB" />
+                <Bar dataKey="qty" shape={(props: any) => {
+                  const { x, y, width, height, payload } = props;
+                  return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                }} />
               </BarChart>
             </ResponsiveContainer>
           </div>

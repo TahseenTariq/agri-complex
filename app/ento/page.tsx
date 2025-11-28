@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
 
 export default function EntoPage() {
@@ -18,6 +18,9 @@ export default function EntoPage() {
     { name: 'Verified', value: verified },
     { name: 'Unverified', value: unverified },
   ];
+
+  // Colors: Green and Red for comparison, then Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   const assetData = [
     { sNo: 1, name: 'Varnish', qty: '4 kg', dateReceived: '26.05.1997', lastVerification: '26.08.1999' },
@@ -88,9 +91,10 @@ export default function EntoPage() {
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie data={verifyData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                  {verifyData.map((entry, index) => <Cell key={`cell-${index}`} fill={['#0ea5a4', '#f97316'][index]} />)}
+                  {verifyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
             <div className="card-list mt-4">

@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -32,7 +32,8 @@ export default function FloriculturePage() {
     { name: 'Sweeper', value: 1 },
   ];
 
-  const COLORS = ['#4caf50', '#ff9800', '#2c7744', '#6fb98f'];
+  // Colors: Green, Red, Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -54,6 +55,7 @@ export default function FloriculturePage() {
                   {landData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
             <div className="stats">
@@ -94,11 +96,14 @@ export default function FloriculturePage() {
         <div className="card">
           <h3><i className="fas fa-users"></i> Human Resources</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={hrData}>
+            <BarChart data={hrData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
               <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="value" fill="#4caf50" />
+              <Bar dataKey="value" shape={(props: any) => {
+                const { x, y, width, height, payload } = props;
+                return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+              }} />
             </BarChart>
           </ResponsiveContainer>
           <table className="data-table">

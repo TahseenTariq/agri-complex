@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -60,7 +60,8 @@ export default function MNSUAMPage() {
     { name: 'Very Large (>100)', value: 2 },
   ];
 
-  const COLORS = ['#3498db', '#2980b9', '#1f618d', '#154360', '#5dade2', '#85c1e9', '#aed6f1', '#d6eaf8', '#ebf5fb', '#2e86c1', '#2874a6', '#21618c'];
+  // Colors: Green, Red, Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -88,6 +89,7 @@ export default function MNSUAMPage() {
                       {labsData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                     </Pie>
                     <Tooltip />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="stats">
@@ -100,20 +102,24 @@ export default function MNSUAMPage() {
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie data={equipmentStatusData} cx="50%" cy="50%" outerRadius={80} dataKey="value">
-                      {equipmentStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={['#27ae60', '#e74c3c'][index]} />)}
+                      {equipmentStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                     </Pie>
                     <Tooltip />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
               <div className="card">
                 <h3><i className="fas fa-microscope"></i> Most Common Equipment</h3>
                 <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={commonEquipmentData}>
+                  <BarChart data={commonEquipmentData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="value" fill="#3498db" />
+                    <Bar dataKey="value" shape={(props: any) => {
+                      const { x, y, width, height, payload } = props;
+                      return <rect x={x} y={y} width={width} height={height} fill={payload.color || COLORS[0]} />;
+                    }} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -158,6 +164,7 @@ export default function MNSUAMPage() {
                       {agronomyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                     </Pie>
                     <Tooltip />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="stats">
@@ -205,6 +212,7 @@ export default function MNSUAMPage() {
                       {facilitiesData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                     </Pie>
                     <Tooltip />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="stats">

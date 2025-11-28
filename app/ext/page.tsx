@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { Cell, Legend } from 'recharts';
 
 const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
 const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
 const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
 const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
 const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
 const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
@@ -31,6 +31,9 @@ export default function ExtPage() {
     { name: 'Filled Positions', value: 113 },
     { name: 'Vacant Positions', value: 39 },
   ];
+
+  // Colors: Green, Red, Blue, Brown, Yellow
+  const COLORS = ['#22c55e', '#ef4444', '#3b82f6', '#a16207', '#eab308'];
 
   const vacancyRows = [
     { sNo: 1, post: 'CAO/DGA(Ext)', bs: 20, sanctioned: 0, filled: 0, vacant: 0 },
@@ -85,9 +88,10 @@ export default function ExtPage() {
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie data={buildingStatusData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} dataKey="value">
-                  {buildingStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={['#27ae60', '#e74c3c', '#f39c12'][index]} />)}
+                  {buildingStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -98,8 +102,8 @@ export default function ExtPage() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="sanctioned" fill="#3498db" name="Sanctioned" />
-                <Bar dataKey="filled" fill="#27ae60" name="Filled" />
+                <Bar dataKey="sanctioned" name="Sanctioned" fill={COLORS[0]} />
+                <Bar dataKey="filled" name="Filled" fill={COLORS[1]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -108,9 +112,10 @@ export default function ExtPage() {
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie data={vacancyData} cx="50%" cy="50%" outerRadius={80} dataKey="value">
-                  {vacancyData.map((entry, index) => <Cell key={`cell-${index}`} fill={['#27ae60', '#e74c3c'][index]} />)}
+                  {vacancyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -140,7 +145,7 @@ export default function ExtPage() {
           </div>
           <div className="vacancy-table-container">
             <table className="data-table">
-              <thead><tr><th>S.No.</th><th>Name of Post</th><th>B.S</th><th>Sanctioned</th><th>Filled</th><th>Vacant</th></tr></thead>
+              <thead><tr><th>S.No.</th><th>Name of Post</th><th>BPS</th><th>Sanctioned</th><th>Filled</th><th>Vacant</th></tr></thead>
               <tbody>
                 {filteredRows.map((row, idx) => (
                   <tr key={idx}>
