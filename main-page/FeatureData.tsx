@@ -104,7 +104,7 @@ export default function FeatureData() {
       window.location.href = "/mri.html";
     } else if (cottonId === 10) {
       // Navigate to Agricultural Mechanization Research Institute dashboard
-      window.location.href = "/amri.html";
+      router.push("/amri");
     } else if (cottonId === 11) {
       // Navigate to Entomological Research Sub Station Multan dashboard
       window.location.href = "/ento.html";
