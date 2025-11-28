@@ -119,16 +119,16 @@ export default function FeatureData() {
       window.location.href = "/pest.html";
     } else if (cottonId === 12) {
       // Navigate to RAEDC dashboard
-      window.location.href = "/RAEDC.html";
+      window.location.href = "/raedc.html";
     } else if (cottonId === 8) {
-      // Navigate to RAEDC dashboard
-      window.location.href = "/MNSUAM.html";
+      // Navigate to MNSUAM dashboard
+      window.location.href = "/mnsuam.html";
     } else if (cottonId === 13) {
       // Navigate to RARI dashboard
-      window.location.href = "/Rari.html";
+      window.location.href = "/rari.html";
     } else if (cottonId === 2) {
       // Navigate to Soil & Water Research Institute dashboard
-      window.location.href = "/Soil_Water.html";
+      window.location.href = "/soil_water.html";
     } else {
       // Navigate to soil-institute page for all other items
       router.push(`/soil-institute/${cottonId}`);
