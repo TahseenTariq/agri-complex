@@ -88,12 +88,21 @@ const cottons: Cotton[] = [
     image: "/rai.jpg.jpg",
     imageAlt: "RARI",
   },
+  {
+    id: 14,
+    name: "Adaptive Research Station",
+    image: "/adp.jpg.jpg",
+    imageAlt: "Adaptive Research Station",
+  },
 ];
 
 export default function FeatureData() {
   const router = useRouter();
 
   const handleCardClick = (cottonId: number, cottonName: string) => {
+    // Save current scroll position before navigating
+    sessionStorage.setItem('mainPageScrollPosition', window.scrollY.toString());
+    
     if (cottonId === 3) {
       router.push("/cotton-institute");
     } else if (cottonId === 1) {
@@ -129,6 +138,9 @@ export default function FeatureData() {
     } else if (cottonId === 2) {
       // Navigate to Soil & Water Research Institute dashboard
       router.push("/soil-water");
+    } else if (cottonId === 14) {
+      // Navigate to Adaptive Research Station dashboard
+      router.push("/adp");
     }
     // All institutes now have specific routes - no default case needed
   };

@@ -28,8 +28,8 @@ export default function PestPage() {
     { name: 'Vacant Positions', value: 12 },
   ];
 
-  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
-  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
+  // Pretty colors: Green, Red, Blue, Purple, Amber, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -37,6 +37,16 @@ export default function PestPage() {
         <header className="pest-header">
           <h1>Pesticide Quality Control Laboratory</h1>
         </header>
+
+        <div className="card focal-person">
+          <h3><i className="fas fa-user-tie"></i> Focal Person Information</h3>
+          <p><strong>Name:</strong> Dr. Subhan Danish</p>
+          <p><strong>Designation:</strong> Senior Scientist</p>
+          <div className="contact-info">
+            <div className="contact-item"><i className="fas fa-phone"></i><span>0304 7996951</span></div>
+            <div className="contact-item"><i className="fas fa-envelope"></i><span>sd96850@gmail.com</span></div>
+          </div>
+        </div>
 
         <div className="dashboard">
           <div className="card">
@@ -57,8 +67,8 @@ export default function PestPage() {
             <h3><i className="fas fa-vial"></i> Laboratory Equipment</h3>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={equipmentData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                <YAxis />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Bar dataKey="value" shape={(props: any) => {
                   const { x, y, width, height, payload } = props;
@@ -93,7 +103,7 @@ export default function PestPage() {
                 {hrData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
               <Tooltip />
-              <Legend />
+              <Legend wrapperStyle={{ fontSize: '11px' }} />
             </PieChart>
           </ResponsiveContainer>
           <table className="data-table">
@@ -119,41 +129,32 @@ export default function PestPage() {
             </tbody>
           </table>
         </div>
-
-        <div className="card focal-person">
-          <h3><i className="fas fa-user-tie"></i> Focal Person Information</h3>
-          <p><strong>Name:</strong> Dr. Subhan Danish</p>
-          <p><strong>Designation:</strong> Senior Scientist</p>
-          <div className="contact-info">
-            <div className="contact-item"><i className="fas fa-phone"></i><span>0304 7996951</span></div>
-            <div className="contact-item"><i className="fas fa-envelope"></i><span>sd96850@gmail.com</span></div>
-          </div>
-        </div>
       </div>
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       <style jsx>{`
-        .pest-header{background:linear-gradient(135deg,#1a5276,#3498db);color:white;padding:20px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(0,0,0,0.1);text-align:center;}
+        .pest-header{background:linear-gradient(135deg,#6366f1,#8b5cf6,#a855f7);color:white;padding:20px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(99,102,241,0.3);text-align:center;}
         .pest-header h1{font-size:28px;margin-bottom:10px;}
         .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;}
-        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;}
-        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-        .card h3{font-size:18px;margin-bottom:15px;color:#1a5276;display:flex;align-items:center;}
+        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;border-top:4px solid #6366f1;}
+        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(99,102,241,0.2);}
+        .card h3{font-size:18px;margin-bottom:15px;color:#6366f1;display:flex;align-items:center;font-weight:600;}
         .card h3 i{margin-right:10px;}
         .stats{display:flex;justify-content:space-between;margin-top:15px;}
         .stat-item{text-align:center;flex:1;}
-        .stat-value{font-size:24px;font-weight:700;color:#1a5276;margin:10px 0;}
+        .stat-value{font-size:24px;font-weight:700;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:10px 0;}
         .stat-label{font-size:14px;color:#666;}
         .building-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:15px;}
-        .building-item{background-color:#f0f8ff;padding:10px;border-radius:4px;font-size:14px;}
+        .building-item{background:linear-gradient(135deg,#eef2ff,#e0e7ff);padding:10px;border-radius:4px;font-size:14px;border-left:3px solid #6366f1;}
         .data-table{width:100%;border-collapse:collapse;margin-top:15px;}
-        .data-table th{background-color:#e8f4fc;color:#1a5276;text-align:left;padding:12px 15px;font-weight:500;}
+        .data-table th{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;text-align:left;padding:12px 15px;font-weight:500;}
         .data-table td{padding:12px 15px;border-bottom:1px solid #e0e0e0;}
-        .data-table tr:hover{background-color:#f9f9f9;}
-        .focal-person{background:linear-gradient(135deg,#e8f4fc,#d1ebff);border-left:4px solid #1a5276;}
+        .data-table tr:hover{background:linear-gradient(90deg,#eef2ff,transparent);}
+        .data-table tr:nth-child(even){background-color:#faf5ff;}
+        .focal-person{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border-left:4px solid #6366f1;}
         .contact-info{display:flex;flex-wrap:wrap;gap:15px;margin-top:10px;}
         .contact-item{display:flex;align-items:center;margin-right:20px;}
-        .contact-item i{margin-right:8px;color:#1a5276;}
+        .contact-item i{margin-right:8px;color:#6366f1;}
         @media (max-width:768px){.dashboard{grid-template-columns:1fr;}.building-list{grid-template-columns:1fr;}}
       `}</style>
     </div>

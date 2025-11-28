@@ -33,7 +33,7 @@ export default function ExtPage() {
   ];
 
   // Different color schemes for different pie charts
-  const COLORS_BUILDING = ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6']; // Blue-Purple-Pink scheme
+  const COLORS_BUILDING = ['#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6']; // Blue-Purple-Amber scheme
   const COLORS_VACANCY = ['#10b981', '#ef4444', '#3b82f6', '#f97316']; // Green-Red comparison scheme
   const COLORS = COLORS_BUILDING; // Default for bar charts
 
@@ -93,7 +93,7 @@ export default function ExtPage() {
                   {buildingStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_BUILDING[index % COLORS_BUILDING.length]} />)}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -101,8 +101,8 @@ export default function ExtPage() {
             <h3><i className="fas fa-users"></i> Staff Distribution</h3>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={staffData}>
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Bar dataKey="sanctioned" name="Sanctioned" fill={COLORS_VACANCY[0]} />
                 <Bar dataKey="filled" name="Filled" fill={COLORS_VACANCY[1]} />
@@ -117,7 +117,7 @@ export default function ExtPage() {
                   {vacancyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_VACANCY[index % COLORS_VACANCY.length]} />)}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -167,29 +167,30 @@ export default function ExtPage() {
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       <style jsx>{`
-        .ext-header{background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(0,0,0,0.1);text-align:center;}
+        .ext-header{background:linear-gradient(135deg,#0ea5e9,#06b6d4,#14b8a6);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(14,165,233,0.3);text-align:center;}
         .ext-header h1{font-size:28px;margin-bottom:10px;}
         .subtitle{font-size:18px;opacity:0.9;}
-        h2{font-size:22px;margin-bottom:15px;color:#27ae60;border-bottom:2px solid #e0e0e0;padding-bottom:8px;}
+        h2{font-size:22px;margin-bottom:15px;color:#0ea5e9;border-bottom:3px solid #0ea5e9;padding-bottom:8px;}
         .summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px;}
-        .summary-card{background:white;border-radius:8px;padding:15px;text-align:center;box-shadow:0 4px 8px rgba(0,0,0,0.05);}
-        .summary-card .value{font-size:24px;font-weight:700;color:#27ae60;margin-bottom:5px;}
+        .summary-card{background:white;border-radius:8px;padding:15px;text-align:center;box-shadow:0 4px 8px rgba(0,0,0,0.05);border-top:4px solid #0ea5e9;}
+        .summary-card .value{font-size:24px;font-weight:700;background:linear-gradient(135deg,#0ea5e9,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px;}
         .summary-card .label{font-size:14px;color:#666;}
         .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;}
-        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;}
-        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-        .card h3{font-size:18px;margin-bottom:15px;color:#27ae60;display:flex;align-items:center;}
+        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;border-top:4px solid #0ea5e9;}
+        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(14,165,233,0.2);}
+        .card h3{font-size:18px;margin-bottom:15px;color:#0ea5e9;display:flex;align-items:center;font-weight:600;}
         .card h3 i{margin-right:10px;}
         .data-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:14px;}
-        .data-table th{background-color:#e8f5e9;color:#27ae60;font-weight:500;padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;position:sticky;top:0;}
+        .data-table th{background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;font-weight:500;padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;position:sticky;top:0;}
         .data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;}
-        .data-table tr:hover{background-color:#f9f9f9;}
-        .status-utilized{background-color:#e8f5e9;color:#27ae60;padding:4px 8px;border-radius:4px;font-weight:500;}
-        .status-unused{background-color:#ffebee;color:#e53935;padding:4px 8px;border-radius:4px;font-weight:500;}
+        .data-table tr:hover{background:linear-gradient(90deg,#e0f2fe,transparent);}
+        .data-table tr:nth-child(even){background-color:#f0f9ff;}
+        .status-utilized{background:linear-gradient(135deg,#10b981,#14b8a6);color:white;padding:4px 8px;border-radius:4px;font-weight:500;}
+        .status-unused{background:linear-gradient(135deg,#ef4444,#f97316);color:white;padding:4px 8px;border-radius:4px;font-weight:500;}
         .building-table-container,.vacancy-table-container{max-height:500px;overflow-y:auto;margin-top:15px;border:1px solid #e0e0e0;border-radius:8px;}
         .filters{display:flex;gap:15px;margin-bottom:20px;flex-wrap:wrap;}
-        .filter-btn{background:#e8f5e9;border:1px solid #27ae60;color:#27ae60;padding:8px 16px;border-radius:4px;cursor:pointer;transition:all 0.3s ease;}
-        .filter-btn.active{background:#27ae60;color:white;}
+        .filter-btn{background:#e0f2fe;border:1px solid #0ea5e9;color:#0ea5e9;padding:8px 16px;border-radius:4px;cursor:pointer;transition:all 0.3s ease;}
+        .filter-btn.active{background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:white;}
         @media (max-width:768px){.dashboard{grid-template-columns:1fr;}.summary-cards{grid-template-columns:1fr;}}
       `}</style>
     </div>

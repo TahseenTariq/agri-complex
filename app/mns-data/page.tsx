@@ -54,12 +54,8 @@ interface GradientStop {
   end: string;
 }
 
-// Different color schemes for different pie charts
-const COLORS_BUILDINGS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#10b981']; // Blue-Purple-Pink scheme
-const COLORS_FARM = ['#10b981', '#14b8a6', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316']; // Green-Teal-Blue scheme
-const COLORS_HAND = ['#f97316', '#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899']; // Orange-Yellow-Green scheme
-const COLORS_ELECTRICITY = ['#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#3b82f6', '#10b981']; // Purple-Pink-Teal scheme
-const COLORS = COLORS_BUILDINGS; // Default fallback
+// Pretty colors: Green, Red, Blue, Purple, Amber, Orange, Teal, Yellow
+const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#eab308'];
 
 const chartPalettes: Record<string, GradientStop[]> = {
   buildings: [
@@ -120,7 +116,7 @@ const fallbackPalette: GradientStop[] = [
   { start: "#8B5CF6", end: "#C4B5FD" },
   { start: "#F43F5E", end: "#FDA4AF" },
   { start: "#0EA5E9", end: "#67E8F9" },
-  { start: "#EC4899", end: "#F9A8D4" },
+  { start: "#F59E0B", end: "#FCD34D" },
   { start: "#14B8A6", end: "#5EEAD4" },
 ];
 
@@ -198,26 +194,19 @@ const renderPieVisualization = (
                 dataKey="value"
                 paddingAngle={2}
                 stroke="white"
-                strokeWidth={3}
-                label={({ name, percent, value }: { name?: string; percent?: number; value?: number }) =>
-                  labelMode === "value"
+                strokeWidth={0.5}
+                label={({ name, percent, value }: { name?: string; percent?: number; value?: number }) => {
+                  const text = labelMode === "value"
                     ? formatAbsoluteLabel(name, value, valueFormatterOption)
-                    : formatLabel(name, percent)
-                }
+                    : formatLabel(name, percent);
+                  return <text style={{ fontSize: '10px' }}>{text}</text>;
+                }}
                 labelLine={false}
               >
-                {data.map((slice, index) => {
-                  // Select color scheme based on chartId
-                  let colorScheme = COLORS;
-                  if (chartId === 'buildings') colorScheme = COLORS_BUILDINGS;
-                  else if (chartId === 'farm') colorScheme = COLORS_FARM;
-                  else if (chartId === 'hand') colorScheme = COLORS_HAND;
-                  else if (chartId === 'electricity') colorScheme = COLORS_ELECTRICITY;
-                  
-                  return (
+                {data.map((slice, index) => (
                   <Cell
                     key={`${chartId}-slice-${slice.name}-${index}`}
-                    fill={colorScheme[index % colorScheme.length]}
+                    fill={COLORS[index % COLORS.length]}
                     style={{
                       filter: "drop-shadow(0 12px 16px rgba(15, 23, 42, 0.18))",
                       transition: "transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease",
@@ -235,8 +224,7 @@ const renderPieVisualization = (
                       target.style.opacity = "1";
                     }}
                   />
-                  );
-                })}
+                ))}
               </Pie>
               <Tooltip
                 formatter={tooltipFormatterWithMode}
@@ -247,7 +235,7 @@ const renderPieVisualization = (
                   boxShadow: "0 18px 28px -16px rgba(15, 23, 42, 0.45)",
                   padding: "14px 18px",
                 }}
-                labelStyle={{ fontWeight: 600, color: "#1f2937" }}
+                labelStyle={{ fontWeight: 600, color: "#1f2937", fontSize: '11px' }}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -349,7 +337,7 @@ const DataTable = memo(({
   return (
     <div className="panel-card rounded-xl shadow-lg p-4 sm:p-6 md:p-8">
       <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2 pb-2 border-b border-gray-200 flex-wrap">
-        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
         <span>{title}</span> <span className="text-xs sm:text-sm md:text-base font-normal text-gray-500">({data.length} records)</span>
@@ -359,7 +347,7 @@ const DataTable = memo(({
           <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
             <div className="overflow-y-auto max-h-[400px] sm:max-h-[500px] md:max-h-[600px]">
               <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gradient-to-r from-gray-700 to-gray-800 sticky top-0 z-10">
+                <thead className="bg-gradient-to-r from-orange-500 to-amber-500 sticky top-0 z-10">
                   <tr>
                     {columns.map((col) => (
                       <th
@@ -373,7 +361,7 @@ const DataTable = memo(({
                 </thead>
                 <tbody className="table-surface divide-y divide-gray-200">
                   {data.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-blue-50 transition-colors">
+                    <tr key={idx} className="hover:bg-orange-50 transition-colors">
                       {columns.map((col) => (
                         <td key={col.key} className="px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 whitespace-nowrap text-[10px] sm:text-xs md:text-sm text-gray-900">
                           {col.render 
@@ -632,7 +620,7 @@ export default function MnsDataPage() {
           ? (value: any) => (
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 value?.toLowerCase() === 'functional' || value?.toLowerCase() === 'working' 
-                  ? 'bg-green-100 text-green-800' 
+                  ? 'bg-orange-100 text-orange-800' 
                   : 'bg-red-100 text-red-800'
               }`}>
                 {value || '—'}
@@ -832,28 +820,28 @@ export default function MnsDataPage() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-orange-50 to-amber-100 rounded-xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm text-gray-600 font-medium mb-1">Building Details</p>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">{buildingDetails.length}</p>
               </div>
-              <div className="w-12 h-12 bg-blue-200 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-200 to-amber-200 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-amber-50 to-yellow-100 rounded-xl shadow-lg p-6 border-l-4 border-amber-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm text-gray-600 font-medium mb-1">Farm Machinery</p>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">{farmMachinery.length}</p>
               </div>
-              <div className="w-12 h-12 bg-green-200 rounded-lg flex items-center justify-center">
-                <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-gradient-to-br from-amber-200 to-yellow-200 rounded-lg flex items-center justify-center">
+                <svg className="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -871,28 +859,28 @@ export default function MnsDataPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-coral-50 to-orange-100 rounded-xl shadow-lg p-6 border-l-4 border-orange-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm text-gray-600 font-medium mb-1">Lab Machinery</p>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">{labMachinery.length}</p>
               </div>
-              <div className="w-12 h-12 bg-purple-200 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-200 to-coral-200 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                 </svg>
               </div>
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-yellow-50 to-amber-100 rounded-xl shadow-lg p-6 border-l-4 border-yellow-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm text-gray-600 font-medium mb-1">Human Resources</p>
                 <p className="text-2xl sm:text-3xl font-bold text-gray-900">{humanResources.length}</p>
               </div>
-              <div className="w-12 h-12 bg-orange-200 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-200 to-amber-200 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H3v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
@@ -902,9 +890,9 @@ export default function MnsDataPage() {
 
         {/* Department Info Section */}
         {department && (
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg p-3 sm:p-5 md:p-6 mb-6 sm:mb-8 border border-blue-100">
+          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-lg p-3 sm:p-5 md:p-6 mb-6 sm:mb-8 border border-orange-200">
             <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 mb-3 sm:mb-5 flex items-center gap-2">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
               <span>Department Information</span>

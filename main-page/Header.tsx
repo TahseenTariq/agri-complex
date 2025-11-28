@@ -8,18 +8,25 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Scroll to top when pathname changes to homepage
+  // Scroll to top when pathname changes to homepage (only if no saved scroll position)
   useEffect(() => {
     if (pathname === '/') {
-      // Small delay to ensure page has rendered
-      const timer = setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 50);
-      return () => clearTimeout(timer);
+      // Check if there's a saved scroll position - if yes, don't scroll to top
+      const savedScrollPosition = sessionStorage.getItem('mainPageScrollPosition');
+      if (!savedScrollPosition) {
+        // Small delay to ensure page has rendered
+        const timer = setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 50);
+        return () => clearTimeout(timer);
+      }
     }
   }, [pathname]);
 
   const handleTitleClick = () => {
+    // Clear saved scroll position when clicking home button
+    sessionStorage.removeItem('mainPageScrollPosition');
+    
     // If already on homepage, just scroll to top immediately
     if (pathname === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });

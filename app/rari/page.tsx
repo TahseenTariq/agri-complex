@@ -29,8 +29,8 @@ export default function RARIPage() {
     { name: 'Plant Protection', value: 85 },
   ];
 
-  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
-  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
+  // Pretty colors: Green, Red, Blue, Purple, Amber, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -49,7 +49,7 @@ export default function RARIPage() {
                   {staffData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
             <div className="stats">
@@ -61,8 +61,8 @@ export default function RARIPage() {
             <h3><i className="fas fa-seedling"></i> Research Focus Areas</h3>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={researchData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                <YAxis domain={[0, 100]} />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 11 }} />
+                <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
                 <Tooltip formatter={(value: any) => `${value}%`} />
                 <Bar dataKey="value" shape={(props: any) => {
                   const { x, y, width, height, payload } = props;
@@ -129,25 +129,26 @@ export default function RARIPage() {
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       <style jsx>{`
-        .rari-header{background:linear-gradient(135deg,#8e44ad,#9b59b6);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        .rari-header{background:linear-gradient(135deg,#a855f7,#c084fc,#8b5cf6);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(168,85,247,0.3);}
         .rari-header h1{font-size:28px;margin-bottom:10px;}
         .subtitle{font-size:18px;opacity:0.9;}
         .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;}
-        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;}
-        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-        .card h3{font-size:18px;margin-bottom:15px;color:#8e44ad;display:flex;align-items:center;}
+        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;border-top:4px solid #a855f7;}
+        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(168,85,247,0.2);}
+        .card h3{font-size:18px;margin-bottom:15px;color:#a855f7;display:flex;align-items:center;font-weight:600;}
         .card h3 i{margin-right:10px;}
         .stats{display:flex;justify-content:space-between;margin-top:15px;}
         .stat-item{text-align:center;flex:1;}
-        .stat-value{font-size:24px;font-weight:700;color:#8e44ad;}
+        .stat-value{font-size:24px;font-weight:700;background:linear-gradient(135deg,#a855f7,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
         .stat-label{font-size:14px;color:#666;}
         .outputs-list{list-style-type:none;padding-left:0;}
         .outputs-list li{padding:8px 0;border-bottom:1px solid #eee;display:flex;align-items:flex-start;}
-        .outputs-list li:before{content:"•";color:#8e44ad;font-weight:bold;margin-right:10px;}
+        .outputs-list li:before{content:"•";color:#a855f7;font-weight:bold;margin-right:10px;font-size:20px;}
         .functions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:15px;margin-top:15px;}
-        .function-item{background:#f8f9fa;padding:15px;border-radius:6px;border-left:4px solid #8e44ad;}
-        .function-item h4{color:#8e44ad;margin-bottom:8px;font-size:16px;}
-        .highlight-box{background:linear-gradient(135deg,#f8f9fa,#e8eaf6);border-left:4px solid #8e44ad;padding:15px;border-radius:6px;margin:15px 0;}
+        .function-item{background:linear-gradient(135deg,#faf5ff,#f3e8ff);padding:15px;border-radius:6px;border-left:4px solid #a855f7;transition:transform 0.2s ease;}
+        .function-item:hover{transform:translateX(5px);}
+        .function-item h4{color:#a855f7;margin-bottom:8px;font-size:16px;font-weight:600;}
+        .highlight-box{background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-left:4px solid #a855f7;padding:15px;border-radius:6px;margin:15px 0;}
         @media (max-width:768px){.dashboard{grid-template-columns:1fr;}.functions-grid{grid-template-columns:1fr;}}
       `}</style>
     </div>

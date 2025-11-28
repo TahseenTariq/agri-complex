@@ -43,7 +43,7 @@ export default function SoilWaterPage() {
   ];
 
   // Different color schemes for different pie charts
-  const COLORS_BUDGET = ['#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#3b82f6']; // Purple-Pink-Orange scheme
+  const COLORS_BUDGET = ['#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#3b82f6']; // Purple-Amber-Orange scheme
   const COLORS_STAFF = ['#10b981', '#ef4444', '#3b82f6', '#f97316']; // Green-Red comparison scheme
   const COLORS = COLORS_BUDGET; // Default for bar charts
 
@@ -54,23 +54,25 @@ export default function SoilWaterPage() {
           <h1>Soil & Water Testing Laboratory for Research</h1>
           </header>
 
+        {/* Focal Person */}
+        <div className="card" style={{ marginBottom: '30px' }}>
+          <h3><i className="fas fa-user"></i> Focal Person</h3>
+          <div className="focal-person">
+            <p><strong>Name:</strong> Ms. Fatima Bibi</p>
+            <p><strong>Designation:</strong> Principal Scientist</p>
+            <div className="contact-info">
+              <div className="contact-item"><i className="fas fa-phone"></i><span>061-4423568</span></div>
+              <div className="contact-item"><i className="fas fa-envelope"></i><span>swt_mltn@yahoo.com</span></div>
+            </div>
+            <p><strong>Address:</strong> Soil & Water Testing Lab., Govt. Agricultural Farm, Old Shujabad Road, Multan</p>
+            <p><strong>Coordinates:</strong> Latitude: 28.652145° Longitude: 70.694682°</p>
+          </div>
+        </div>
+
         {/* Project Overview */}
         <div className="section">
           <h2>Project Overview</h2>
           <div className="dashboard">
-            <div className="card">
-              <h3><i className="fas fa-user"></i> Focal Person</h3>
-              <div className="focal-person">
-                <p><strong>Name:</strong> Ms. Fatima Bibi</p>
-                <p><strong>Designation:</strong> Principal Scientist</p>
-                <div className="contact-info">
-                  <div className="contact-item"><i className="fas fa-phone"></i><span>061-4423568</span></div>
-                  <div className="contact-item"><i className="fas fa-envelope"></i><span>swt_mltn@yahoo.com</span></div>
-                </div>
-                <p><strong>Address:</strong> Soil & Water Testing Lab., Govt. Agricultural Farm, Old Shujabad Road, Multan</p>
-                <p><strong>Coordinates:</strong> Latitude: 28.652145° Longitude: 70.694682°</p>
-              </div>
-            </div>
             <div className="card">
               <h3><i className="fas fa-bullseye"></i> Project Impact</h3>
               <div className="impact-box">
@@ -111,7 +113,7 @@ export default function SoilWaterPage() {
                     {budgetData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_BUDGET[index % COLORS_BUDGET.length]} />)}
                   </Pie>
                   <Tooltip />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '11px' }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -119,8 +121,8 @@ export default function SoilWaterPage() {
               <h3><i className="fas fa-calendar-alt"></i> Yearly Allocation</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={yearlyBudgetData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-                  <XAxis dataKey="year" />
-                  <YAxis />
+                  <XAxis dataKey="year" tick={{ fontSize: 11 }} />
+                  <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip />
                   <Bar dataKey="amount" shape={(props: any) => {
                     const { x, y, width, height, payload } = props;
@@ -173,7 +175,7 @@ export default function SoilWaterPage() {
                     {staffData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_STAFF[index % COLORS_STAFF.length]} />)}
                   </Pie>
                   <Tooltip />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '11px' }} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="stats">
@@ -227,8 +229,8 @@ export default function SoilWaterPage() {
               <h3><i className="fas fa-tools"></i> Equipment Summary</h3>
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={equipmentData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                  <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip />
                   <Bar dataKey="value" shape={(props: any) => {
                     const { x, y, width, height, payload } = props;
@@ -272,37 +274,38 @@ export default function SoilWaterPage() {
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       <style jsx>{`
-        .sw-header {background:linear-gradient(135deg,#8b4513,#a0522d);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        .sw-header {background:linear-gradient(135deg,#10b981,#22c55e,#84cc16);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(16,185,129,0.3);}
         .sw-header h1{font-size:28px;margin-bottom:10px;}
         .subtitle{font-size:18px;opacity:0.9;}
-        h2{font-size:22px;margin:30px 0 15px;color:#8b4513;border-bottom:2px solid #e0e0e0;padding-bottom:8px;}
+        h2{font-size:22px;margin:30px 0 15px;color:#10b981;border-bottom:3px solid #10b981;padding-bottom:8px;}
         .section{margin-bottom:40px;}
         .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;}
-        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;}
-        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-        .card h3{font-size:18px;margin-bottom:15px;color:#a0522d;display:flex;align-items:center;}
+        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;border-top:4px solid #10b981;}
+        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(16,185,129,0.2);}
+        .card h3{font-size:18px;margin-bottom:15px;color:#10b981;display:flex;align-items:center;font-weight:600;}
         .card h3 i{margin-right:10px;}
         .stats{display:flex;justify-content:space-between;margin-top:15px;}
         .stat-item{text-align:center;flex:1;}
-        .stat-value{font-size:24px;font-weight:700;color:#8b4513;margin:10px 0;}
+        .stat-value{font-size:24px;font-weight:700;background:linear-gradient(135deg,#10b981,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:10px 0;}
         .stat-label{font-size:14px;color:#666;}
-        .focal-person{background:linear-gradient(135deg,#f5e8d9,#e9d4b8);border-left:4px solid #8b4513;padding:15px;border-radius:6px;margin:15px 0;}
+        .focal-person{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-left:4px solid #10b981;padding:15px;border-radius:6px;margin:15px 0;}
         .contact-info{display:flex;flex-wrap:wrap;gap:15px;margin-top:10px;}
         .contact-item{display:flex;align-items:center;margin-right:20px;}
-        .contact-item i{margin-right:8px;color:#8b4513;}
-        .impact-box{background:linear-gradient(135deg,#f5e8d9,#e9d4b8);border-left:4px solid #8b4513;padding:15px;border-radius:6px;margin:15px 0;}
+        .contact-item i{margin-right:8px;color:#10b981;}
+        .impact-box{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-left:4px solid #10b981;padding:15px;border-radius:6px;margin:15px 0;}
         .outcomes-list{list-style-type:none;padding-left:0;}
         .outcomes-list li{padding:8px 0;border-bottom:1px solid #e0e0e0;display:flex;align-items:flex-start;}
-        .outcomes-list li:before{content:"✓";color:#8b4513;font-weight:bold;margin-right:10px;font-size:18px;}
+        .outcomes-list li:before{content:"✓";color:#10b981;font-weight:bold;margin-right:10px;font-size:18px;background:#d1fae5;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
         .data-table{width:100%;border-collapse:collapse;margin-top:15px;}
-        .data-table th{background-color:#f5e8d9;color:#8b4513;text-align:left;padding:10px 12px;font-weight:500;}
+        .data-table th{background:linear-gradient(135deg,#10b981,#22c55e);color:white;text-align:left;padding:10px 12px;font-weight:500;}
         .data-table td{padding:10px 12px;border-bottom:1px solid #e0e0e0;}
-        .data-table tr:hover{background-color:#f9f9f9;}
+        .data-table tr:hover{background:linear-gradient(90deg,#d1fae5,transparent);}
+        .data-table tr:nth-child(even){background-color:#f0fdf4;}
         .budget-table-container{max-height:500px;overflow-y:auto;margin-top:15px;border:1px solid #e0e0e0;border-radius:8px;}
         .equipment-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;margin-top:15px;}
-        .equipment-item{background:#f8f9fa;padding:15px;border-radius:6px;text-align:center;border-left:4px solid #8b4513;}
-        .equipment-item h4{color:#8b4513;margin-bottom:8px;}
-        .quantity{display:inline-block;background:#8b4513;color:white;padding:4px 8px;border-radius:4px;font-size:14px;font-weight:500;margin-top:5px;}
+        .equipment-item{background:linear-gradient(135deg,#ecfdf5,#d1fae5);padding:15px;border-radius:6px;text-align:center;border-left:4px solid #10b981;}
+        .equipment-item h4{color:#10b981;margin-bottom:8px;font-weight:600;}
+        .quantity{display:inline-block;background:linear-gradient(135deg,#10b981,#22c55e);color:white;padding:4px 8px;border-radius:4px;font-size:14px;font-weight:500;margin-top:5px;}
         @media (max-width:768px){.dashboard{grid-template-columns:1fr;}.equipment-grid{grid-template-columns:1fr;}}
       `}</style>
     </div>

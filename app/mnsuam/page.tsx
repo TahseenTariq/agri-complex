@@ -61,10 +61,10 @@ export default function MNSUAMPage() {
   ];
 
   // Different color schemes for different pie charts
-  const COLORS_LABS = ['#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6']; // Green-Blue-Purple scheme
+  const COLORS_LABS = ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6']; // Green-Blue-Purple scheme
   const COLORS_EQUIPMENT = ['#ef4444', '#f97316', '#eab308', '#10b981', '#3b82f6']; // Red-Orange-Yellow scheme
-  const COLORS_AGRONOMY = ['#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#3b82f6']; // Purple-Pink-Teal scheme
-  const COLORS_FACILITIES = ['#14b8a6', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899']; // Teal-Green-Blue scheme
+  const COLORS_AGRONOMY = ['#8b5cf6', '#f59e0b', '#14b8a6', '#f97316', '#3b82f6']; // Purple-Amber-Teal scheme
+  const COLORS_FACILITIES = ['#14b8a6', '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b']; // Teal-Green-Blue scheme
   const COLORS = COLORS_LABS; // Default for bar charts
 
   return (
@@ -93,7 +93,7 @@ export default function MNSUAMPage() {
                       {labsData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_LABS[index % COLORS_LABS.length]} />)}
                     </Pie>
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="stats">
@@ -109,7 +109,7 @@ export default function MNSUAMPage() {
                       {equipmentStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_EQUIPMENT[index % COLORS_EQUIPMENT.length]} />)}
                     </Pie>
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -117,8 +117,8 @@ export default function MNSUAMPage() {
                 <h3><i className="fas fa-microscope"></i> Most Common Equipment</h3>
                 <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={commonEquipmentData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
+                    <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                    <YAxis tick={{ fontSize: 11 }} />
                     <Tooltip />
                     <Bar dataKey="value" shape={(props: any) => {
                       const { x, y, width, height, payload } = props;
@@ -168,7 +168,7 @@ export default function MNSUAMPage() {
                       {agronomyData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_AGRONOMY[index % COLORS_AGRONOMY.length]} />)}
                     </Pie>
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="stats">
@@ -216,7 +216,7 @@ export default function MNSUAMPage() {
                       {facilitiesData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS_FACILITIES[index % COLORS_FACILITIES.length]} />)}
                     </Pie>
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '11px' }} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="stats">
@@ -256,34 +256,35 @@ export default function MNSUAMPage() {
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       <style jsx>{`
-        .mnsuam-header{background:linear-gradient(135deg,#2c3e50,#3498db);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(0,0,0,0.1);text-align:center;}
+        .mnsuam-header{background:linear-gradient(135deg,#f59e0b,#f97316,#ef4444);color:white;padding:25px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(245,158,11,0.3);text-align:center;}
         .mnsuam-header h1{font-size:28px;margin-bottom:10px;}
         .subtitle{font-size:18px;opacity:0.9;}
-        h2{font-size:22px;margin-bottom:15px;color:#2c3e50;border-bottom:2px solid #e0e0e0;padding-bottom:8px;}
+        h2{font-size:22px;margin-bottom:15px;color:#f59e0b;border-bottom:3px solid #f59e0b;padding-bottom:8px;}
         .tabs{display:flex;background:white;border-radius:8px;margin-bottom:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);overflow:hidden;}
-        .tab{flex:1;padding:15px 20px;text-align:center;cursor:pointer;transition:all 0.3s ease;border-bottom:3px solid transparent;font-weight:500;background:none;border:none;color:#2c3e50;}
-        .tab.active{background:#3498db;color:white;border-bottom:3px solid #2c3e50;}
-        .tab:hover:not(.active){background:#f8f9fa;}
+        .tab{flex:1;padding:15px 20px;text-align:center;cursor:pointer;transition:all 0.3s ease;border-bottom:3px solid transparent;font-weight:500;background:none;border:none;color:#f59e0b;}
+        .tab.active{background:linear-gradient(135deg,#f59e0b,#f97316);color:white;border-bottom:3px solid #f59e0b;}
+        .tab:hover:not(.active){background:#fef3c7;}
         .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;}
-        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;}
-        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-        .card h3{font-size:18px;margin-bottom:15px;color:#3498db;display:flex;align-items:center;}
+        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;border-top:4px solid #f59e0b;}
+        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(245,158,11,0.2);}
+        .card h3{font-size:18px;margin-bottom:15px;color:#f59e0b;display:flex;align-items:center;font-weight:600;}
         .card h3 i{margin-right:10px;}
         .stats{display:flex;justify-content:space-between;margin-top:15px;}
         .stat-item{text-align:center;flex:1;}
-        .stat-value{font-size:24px;font-weight:700;color:#3498db;}
+        .stat-value{font-size:24px;font-weight:700;background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
         .stat-label{font-size:14px;color:#666;}
         .data-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:14px;}
-        .data-table th{background-color:#e8f4fc;color:#2c3e50;font-weight:500;padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;position:sticky;top:0;}
+        .data-table th{background:linear-gradient(135deg,#f59e0b,#f97316);color:white;font-weight:500;padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;position:sticky;top:0;}
         .data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #e0e0e0;}
-        .data-table tr:hover{background-color:#f9f9f9;}
+        .data-table tr:hover{background:linear-gradient(90deg,#fef3c7,transparent);}
+        .data-table tr:nth-child(even){background-color:#fffbeb;}
         .lab-table-container{max-height:500px;overflow-y:auto;margin-top:15px;border:1px solid #e0e0e0;border-radius:8px;}
-        .non-functional{color:#e74c3c;font-weight:500;}
-        .focal-person{background:linear-gradient(135deg,#e8f4fc,#d1ebff);border-left:4px solid #3498db;padding:15px;border-radius:6px;margin:15px 0;}
+        .non-functional{color:#ef4444;font-weight:500;}
+        .focal-person{background:linear-gradient(135deg,#fef3c7,#fde68a);border-left:4px solid #f59e0b;padding:15px;border-radius:6px;margin:15px 0;}
         .facilities-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:15px;margin-top:15px;}
-        .facility-item{background:#f8f9fa;padding:15px;border-radius:6px;border-left:4px solid #3498db;}
-        .facility-item h4{color:#2c3e50;margin-bottom:8px;font-size:16px;}
-        .capacity{display:inline-block;background:#3498db;color:white;padding:4px 8px;border-radius:4px;font-size:14px;font-weight:500;margin-top:5px;}
+        .facility-item{background:linear-gradient(135deg,#fffbeb,#fef3c7);padding:15px;border-radius:6px;border-left:4px solid #f59e0b;}
+        .facility-item h4{color:#f59e0b;margin-bottom:8px;font-size:16px;font-weight:600;}
+        .capacity{display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:white;padding:4px 8px;border-radius:4px;font-size:14px;font-weight:500;margin-top:5px;}
         @media (max-width:768px){.dashboard{grid-template-columns:1fr;}.tabs{flex-direction:column;}.facilities-grid{grid-template-columns:1fr;}}
       `}</style>
     </div>

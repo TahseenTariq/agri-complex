@@ -24,8 +24,8 @@ export default function MRIPage() {
     { name: 'Cultivated', value: 32 },
   ];
 
-  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
-  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
+  // Pretty colors: Green, Red, Blue, Purple, Amber, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#eef2f7', minHeight: '100vh' }}>
@@ -92,7 +92,7 @@ export default function MRIPage() {
                   {hrData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -100,8 +100,8 @@ export default function MRIPage() {
             <h4 className="text-center mb-3">Land Distribution</h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={landData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Bar dataKey="value" shape={(props: any) => {
                   const { x, y, width, height, payload } = props;
@@ -114,18 +114,19 @@ export default function MRIPage() {
       </div>
 
       <style jsx>{`
-        .mri-header{background:#1a237e;color:#fff;padding:25px;text-align:center;font-size:30px;font-weight:600;}
+        .mri-header{background:linear-gradient(135deg,#8b5cf6,#a855f7,#ef4444);color:#fff;padding:25px;text-align:center;font-size:30px;font-weight:600;box-shadow:0 4px 12px rgba(139,92,246,0.3);}
         .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
-        .card-summary{background:white;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);padding:20px;text-align:center;}
-        .card-summary h3{color:#1a237e;font-weight:600;margin-bottom:10px;font-size:18px;}
-        .card-summary h2{font-size:32px;font-weight:700;margin:0;}
-        .section-title{color:#1a237e;font-weight:600;font-size:22px;margin:20px 0 10px 0;}
-        .card{background:white;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);padding:20px;}
+        .card-summary{background:white;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);padding:20px;text-align:center;border-top:4px solid #8b5cf6;transition:transform 0.2s,box-shadow 0.2s;}
+        .card-summary:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(139,92,246,0.2);}
+        .card-summary h3{color:#8b5cf6;font-weight:600;margin-bottom:10px;font-size:18px;}
+        .card-summary h2{font-size:32px;font-weight:700;margin:0;background:linear-gradient(135deg,#8b5cf6,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .section-title{color:#8b5cf6;font-weight:600;font-size:22px;margin:20px 0 10px 0;}
+        .card{background:white;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);padding:20px;border-top:4px solid #8b5cf6;}
         .data-table{width:100%;border-collapse:collapse;text-align:center;}
-        .data-table th{background-color:#f8f9fa;color:#1a237e;padding:12px;font-weight:600;border:1px solid #dee2e6;}
+        .data-table th{background:linear-gradient(135deg,#8b5cf6,#a855f7);color:white;padding:12px;font-weight:600;border:1px solid #dee2e6;}
         .data-table td{padding:12px;border:1px solid #dee2e6;}
-        .data-table tr:nth-child(even){background-color:#f8f9fa;}
-        .data-table tr:hover{background-color:#e9ecef;}
+        .data-table tr:nth-child(even){background-color:#faf5ff;}
+        .data-table tr:hover{background:linear-gradient(90deg,#f3e8ff,transparent);}
         .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px;margin-top:20px;}
         @media (max-width:768px){.summary-grid{grid-template-columns:1fr;}.charts-grid{grid-template-columns:1fr;}}
       `}</style>

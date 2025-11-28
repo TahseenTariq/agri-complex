@@ -32,8 +32,8 @@ export default function FloriculturePage() {
     { name: 'Sweeper', value: 1 },
   ];
 
-  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
-  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
+  // Pretty colors: Green, Red, Blue, Purple, Amber, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
@@ -46,6 +46,16 @@ export default function FloriculturePage() {
           </div>
         </header>
 
+        <div className="card focal-person">
+          <h3><i className="fas fa-user-tie"></i> Focal Person Information</h3>
+          <p><strong>Name:</strong> Dr. Muhammad Muzamil Ijaz</p>
+          <p><strong>Designation:</strong> Assistant Research Officer</p>
+          <div className="contact-info">
+            <div className="contact-item"><i className="fas fa-phone"></i><span>03016984364</span></div>
+            <div className="contact-item"><i className="fas fa-envelope"></i><span>muzamil.ijaz243@gmail.com</span></div>
+          </div>
+        </div>
+
         <div className="dashboard">
           <div className="card">
             <h3><i className="fas fa-tachometer-alt"></i> Land Resources</h3>
@@ -55,7 +65,7 @@ export default function FloriculturePage() {
                   {landData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
             <div className="stats">
@@ -97,8 +107,8 @@ export default function FloriculturePage() {
           <h3><i className="fas fa-users"></i> Human Resources</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={hrData.map((entry, index) => ({ ...entry, color: COLORS[index % COLORS.length] }))}>
-              <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-              <YAxis />
+              <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
               <Bar dataKey="value" shape={(props: any) => {
                 const { x, y, width, height, payload } = props;
@@ -124,39 +134,30 @@ export default function FloriculturePage() {
             </tbody>
           </table>
         </div>
-
-        <div className="card focal-person">
-          <h3><i className="fas fa-user-tie"></i> Focal Person Information</h3>
-          <p><strong>Name:</strong> Dr. Muhammad Muzamil Ijaz</p>
-          <p><strong>Designation:</strong> Assistant Research Officer</p>
-          <div className="contact-info">
-            <div className="contact-item"><i className="fas fa-phone"></i><span>03016984364</span></div>
-            <div className="contact-item"><i className="fas fa-envelope"></i><span>muzamil.ijaz243@gmail.com</span></div>
-          </div>
-        </div>
       </div>
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       <style jsx>{`
-        .flori-header{background:linear-gradient(135deg,#2c7744,#4caf50);color:white;padding:20px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        .flori-header{background:linear-gradient(135deg,#eab308,#facc15,#fbbf24);color:white;padding:20px;border-radius:8px;margin-bottom:25px;box-shadow:0 4px 12px rgba(234,179,8,0.3);}
         .flori-header h1{font-size:24px;margin-bottom:5px;}
         .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:30px;}
-        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;}
-        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-        .card h3{font-size:18px;margin-bottom:15px;color:#2c7744;display:flex;align-items:center;}
+        .card{background:white;border-radius:8px;padding:20px;box-shadow:0 4px 8px rgba(0,0,0,0.05);transition:transform 0.3s ease,box-shadow 0.3s ease;border-top:4px solid #eab308;}
+        .card:hover{transform:translateY(-5px);box-shadow:0 6px 12px rgba(234,179,8,0.2);}
+        .card h3{font-size:18px;margin-bottom:15px;color:#eab308;display:flex;align-items:center;font-weight:600;}
         .card h3 i{margin-right:10px;}
         .stats{display:flex;justify-content:space-between;margin-top:15px;}
         .stat-item{text-align:center;flex:1;}
-        .stat-value{font-size:24px;font-weight:700;color:#2c7744;margin:10px 0;}
+        .stat-value{font-size:24px;font-weight:700;background:linear-gradient(135deg,#eab308,#facc15);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:10px 0;}
         .stat-label{font-size:14px;color:#666;}
         .data-table{width:100%;border-collapse:collapse;margin-top:15px;}
-        .data-table th{background-color:#f1f8e9;color:#2c7744;text-align:left;padding:12px 15px;font-weight:500;}
+        .data-table th{background:linear-gradient(135deg,#eab308,#facc15);color:white;text-align:left;padding:12px 15px;font-weight:500;}
         .data-table td{padding:12px 15px;border-bottom:1px solid #e0e0e0;}
-        .data-table tr:hover{background-color:#f9f9f9;}
-        .focal-person{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid #2c7744;}
+        .data-table tr:hover{background:linear-gradient(90deg,#fef9c3,transparent);}
+        .data-table tr:nth-child(even){background-color:#fefce8;}
+        .focal-person{background:linear-gradient(135deg,#fef9c3,#fef3c7);border-left:4px solid #eab308;}
         .contact-info{display:flex;flex-wrap:wrap;gap:15px;margin-top:10px;}
         .contact-item{display:flex;align-items:center;margin-right:20px;}
-        .contact-item i{margin-right:8px;color:#2c7744;}
+        .contact-item i{margin-right:8px;color:#eab308;}
         @media (max-width:768px){.dashboard{grid-template-columns:1fr;}}
       `}</style>
     </div>

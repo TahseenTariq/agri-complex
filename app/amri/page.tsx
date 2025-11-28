@@ -55,8 +55,8 @@ export default function AMRIPage() {
     { name: "Not Functional", value: summary.nonFunctional },
   ];
 
-  // Pretty colors: Green, Red, Blue, Purple, Pink, Orange, Teal, Yellow
-  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#eab308'];
+  // Pretty colors: Green, Red, Blue, Purple, Amber, Orange, Teal, Yellow
+  const COLORS = ['#10b981', '#ef4444', '#3b82f6', '#8b5cf6', '#f59e0b', '#f97316', '#14b8a6', '#eab308'];
 
   return (
     <div style={{ background: '#f4f6f9', minHeight: '100vh' }}>
@@ -91,7 +91,7 @@ export default function AMRIPage() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={(entry: any) => `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`}
+                  label={(entry: any) => <text style={{ fontSize: '10px' }}>{`${entry.name}: ${(entry.percent * 100).toFixed(0)}%`}</text>}
                   outerRadius={80}
                   dataKey="value"
                 >
@@ -100,7 +100,7 @@ export default function AMRIPage() {
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '11px' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -110,8 +110,8 @@ export default function AMRIPage() {
             <h5 className="text-center chart-heading mb-4">Top Machinery Types</h5>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={machineryData.map((x, index) => ({ name: x.name.substring(0, 12), qty: x.qty, color: COLORS[index % COLORS.length] }))}>
-                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                <YAxis />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 11 }} />
+                <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip />
                 <Bar dataKey="qty" shape={(props: any) => {
                   const { x, y, width, height, payload } = props;
@@ -164,6 +164,7 @@ export default function AMRIPage() {
       </div>
 
       <style jsx>{`
+        h1{background:linear-gradient(135deg,#f97316,#ef4444,#eab308);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
         .card-summary {
           background: white;
           border-radius: 15px;
@@ -174,27 +175,28 @@ export default function AMRIPage() {
         }
         .card-summary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+          box-shadow: 0 6px 15px rgba(249,115,22,0.2);
         }
         .card-total {
-          border-left: 4px solid #36A2EB;
+          border-left: 4px solid #f97316;
         }
         .card-functional {
-          border-left: 4px solid #4BC0C0;
+          border-left: 4px solid #10b981;
         }
         .card-nonfunctional {
-          border-left: 4px solid #FF6384;
+          border-left: 4px solid #ef4444;
         }
         .card-chart {
           background: white;
           border-radius: 15px;
           box-shadow: 0 4px 10px rgba(0,0,0,0.1);
           padding: 24px;
+          border-top: 4px solid #f97316;
         }
         .chart-heading {
           font-size: 1rem;
           font-weight: 600;
-          color: #2c3e50;
+          color: #f97316;
           text-transform: none;
           letter-spacing: 0.3px;
         }
@@ -203,23 +205,24 @@ export default function AMRIPage() {
           border-radius: 15px;
           box-shadow: 0 4px 10px rgba(0,0,0,0.1);
           padding: 24px;
+          border-top: 4px solid #f97316;
         }
         .table-header {
-          background: #003f5c;
+          background: linear-gradient(135deg,#f97316,#ef4444);
           color: white;
         }
         .table-row-even {
           background-color: #ffffff;
         }
         .table-row-odd {
-          background-color: #f8f9fa;
+          background-color: #fff7ed;
         }
         .status-functional {
-          background-color: #4BC0C0;
+          background: linear-gradient(135deg,#10b981,#14b8a6);
           color: white;
         }
         .status-nonfunctional {
-          background-color: #FF6384;
+          background: linear-gradient(135deg,#ef4444,#f97316);
           color: white;
         }
         h1, h2 {

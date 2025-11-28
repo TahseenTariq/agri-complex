@@ -15,6 +15,19 @@ export default function CottonInstitutePage() {
           <h1>Cotton Research Institute - Data Summary</h1>
         </header>
 
+        {/* Focal Person */}
+        <div className="contact-card" style={{ marginBottom: '30px' }}>
+          <div className="contact-icon">
+            <i className="fas fa-user-tie"></i>
+          </div>
+          <div className="contact-info">
+            <h3>Designated Focal Person</h3>
+            <p><strong>Name:</strong> Dr. Muhammad Tauseef</p>
+            <p><strong>Position:</strong> Senior Scientist (Agronomy)</p>
+            <p><strong>Contact:</strong> +923340072357</p>
+          </div>
+      </div>
+
         {/* Land & Infrastructure Assets */}
         <section className="summary-section">
           <h2>
@@ -37,7 +50,7 @@ export default function CottonInstitutePage() {
             <div className="stat-card">
               <div className="stat-value">1 acre</div>
               <div className="stat-label">Roads & Pathways</div>
-            </div>
+              </div>
             <div className="stat-card">
               <div className="stat-value">20</div>
               <div className="stat-label">Building Rooms</div>
@@ -45,8 +58,8 @@ export default function CottonInstitutePage() {
             <div className="stat-card">
               <div className="stat-value">5</div>
               <div className="stat-label">Laboratories</div>
-            </div>
-          </div>
+                </div>
+              </div>
         </section>
 
         {/* Human Resource Assets */}
@@ -59,11 +72,11 @@ export default function CottonInstitutePage() {
             <div className="stat-card">
               <div className="stat-value">18</div>
               <div className="stat-label">Total Officers</div>
-            </div>
+              </div>
             <div className="stat-card">
               <div className="stat-value">32</div>
               <div className="stat-label">Officials & Field Staff</div>
-            </div>
+                </div>
             <div className="stat-card">
               <div className="stat-value">50</div>
               <div className="stat-label">Total Workforce</div>
@@ -71,20 +84,8 @@ export default function CottonInstitutePage() {
             <div className="stat-card">
               <div className="stat-value">4</div>
               <div className="stat-label">Vacant Officer Positions</div>
-            </div>
-          </div>
-
-          <div className="contact-card">
-            <div className="contact-icon">
-              <i className="fas fa-user-tie"></i>
-            </div>
-            <div className="contact-info">
-              <h3>Designated Focal Person</h3>
-              <p><strong>Name:</strong> Dr. Muhammad Tauseef</p>
-              <p><strong>Position:</strong> Senior Scientist (Agronomy)</p>
-              <p><strong>Contact:</strong> +923340072357</p>
-            </div>
-          </div>
+                  </div>
+                </div>
         </section>
 
         {/* Laboratory Equipment Analysis */}
@@ -114,8 +115,8 @@ export default function CottonInstitutePage() {
                   <th>Equipment</th>
                   <th>Department</th>
                   <th>Status</th>
-                </tr>
-              </thead>
+                    </tr>
+                  </thead>
               <tbody>
                 <tr>
                   <td>Electrical Penetration Graph</td>
@@ -151,10 +152,10 @@ export default function CottonInstitutePage() {
                   <td>High Volume Instrument (HVI)</td>
                   <td>Fiber Testing Laboratory</td>
                   <td className="status-functional">Functional</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
 
           <div className="insights">
             <h3>
@@ -164,8 +165,8 @@ export default function CottonInstitutePage() {
             <p>
               <strong>Primary Issue:</strong> 12 out of 18 laboratory devices are non-functional due to "chemicals procurement under process." This indicates a systemic issue where advanced analytical and molecular biology equipment is idle due to lack of essential consumables.
             </p>
-          </div>
-        </section>
+            </div>
+          </section>
 
         {/* Farm Machinery Analysis */}
         <section className="summary-section">
@@ -191,8 +192,8 @@ export default function CottonInstitutePage() {
                   <th>Year</th>
                   <th>Location</th>
                   <th>Status</th>
-                </tr>
-              </thead>
+                    </tr>
+                  </thead>
               <tbody>
                 <tr>
                   <td>Massey Ferguson-375</td>
@@ -223,10 +224,10 @@ export default function CottonInstitutePage() {
                   <td>2012</td>
                   <td>CRI, Farm Shed</td>
                   <td className="status-functional">Functional</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
 
           <div className="insights">
             <h3>
@@ -234,8 +235,8 @@ export default function CottonInstitutePage() {
               Key Observation
             </h3>
             <p>The machinery fleet includes a mix of very old (e.g., Tractors from 1991 and 1999) and relatively modern equipment, all maintained in working condition.</p>
-          </div>
-        </section>
+            </div>
+          </section>
       </div>
 
       {/* Font Awesome */}
@@ -280,10 +281,10 @@ export default function CottonInstitutePage() {
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
         .summary-section h2 {
-          color: #2c7744;
+          color: #475569;
           margin-bottom: 20px;
           padding-bottom: 10px;
-          border-bottom: 2px solid #eaeaea;
+          border-bottom: 3px solid #475569;
           display: flex;
           align-items: center;
           font-size: 1.5rem;
@@ -303,17 +304,20 @@ export default function CottonInstitutePage() {
           border-radius: 8px;
           padding: 20px;
           text-align: center;
-          border-left: 4px solid #5a9e6f;
+          border-left: 4px solid #475569;
           transition: transform 0.3s ease;
         }
         .stat-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 6px 12px rgba(71,85,105,0.2);
         }
         .stat-value {
           font-size: 32px;
           font-weight: bold;
-          color: #2c7744;
+          background: linear-gradient(135deg,#475569,#64748b);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           margin: 10px 0;
         }
         .stat-label {
@@ -321,15 +325,16 @@ export default function CottonInstitutePage() {
           font-size: 14px;
         }
         .contact-card {
-          background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+          background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
           border-radius: 8px;
           padding: 20px;
           display: flex;
           align-items: center;
           margin-top: 20px;
+          border-left: 4px solid #475569;
         }
         .contact-icon {
-          background: #2c7744;
+          background: linear-gradient(135deg, #475569, #64748b);
           color: white;
           width: 50px;
           height: 50px;
@@ -343,7 +348,7 @@ export default function CottonInstitutePage() {
         }
         .contact-info h3 {
           margin-bottom: 5px;
-          color: #2c7744;
+          color: #475569;
           font-size: 1.1rem;
           font-weight: 600;
         }
@@ -357,7 +362,7 @@ export default function CottonInstitutePage() {
           margin: 20px 0;
         }
         .cri-table th {
-          background-color: #2c7744;
+          background: linear-gradient(135deg, #475569, #64748b);
           color: white;
           text-align: left;
           padding: 12px 15px;
@@ -368,27 +373,28 @@ export default function CottonInstitutePage() {
           border-bottom: 1px solid #eaeaea;
         }
         .cri-table tr:nth-child(even) {
-          background-color: #f8f9fa;
+          background-color: #f8fafc;
         }
         .cri-table tr:hover {
-          background-color: #e8f5e9;
+          background: linear-gradient(90deg, #f1f5f9, transparent);
         }
         .status-functional {
-          color: #2c7744;
+          color: #10b981;
           font-weight: bold;
         }
         .status-non-functional {
-          color: #e53935;
+          color: #ef4444;
           font-weight: bold;
         }
         .insights {
-          background: #e3f2fd;
+          background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
           border-radius: 8px;
           padding: 20px;
           margin-top: 30px;
+          border-left: 4px solid #475569;
         }
         .insights h3 {
-          color: #1565c0;
+          color: #475569;
           margin-bottom: 15px;
           display: flex;
           align-items: center;

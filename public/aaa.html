@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regional Agricultural Research Institute - Asset Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2E8B57;
+            --secondary: #4CAF50;
+            --accent: #8BC34A;
+            --light: #F1F8E9;
+            --dark: #1B5E20;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #E0E0E0;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .header-title {
+            text-align: center;
+        }
+        
+        .header-title h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header-title p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .card-icon {
+            background-color: var(--light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background-color: var(--light);
+            color: var(--dark);
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background-color: #E8F5E9;
+            color: var(--dark);
+        }
+        
+        .badge-warning {
+            background-color: #FFF8E1;
+            color: #FF8F00;
+        }
+        
+        .badge-danger {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 4px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-working {
+            background-color: #4CAF50;
+        }
+        
+        .status-nonworking {
+            background-color: #F44336;
+        }
+        
+        .status-outoforder {
+            background-color: #FF9800;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-seedling"></i> RARI Bahawalpur
+                </div>
+                <div class="header-title">
+                    <h1>Regional Agricultural Research Institute</h1>
+                    <p>Asset Management System - Comprehensive Overview</p>
+                </div>
+                <div></div> <!-- Empty div for alignment -->
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Land Area</div>
+                <div class="stat-value">178</div>
+                <div>Acres</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Farm Machinery</div>
+                <div class="stat-value">28</div>
+                <div>Equipment Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Lab Equipment</div>
+                <div class="stat-value">24</div>
+                <div>Instruments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Staff</div>
+                <div class="stat-value">131</div>
+                <div>Sanctioned Positions</div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Land Resources</h2>
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Land Distribution</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="landChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Building Details</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Building Type</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Office Buildings (blocks)</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>Produce Store & Shed</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Residential Quarters</td>
+                                <td>29</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;&nbsp;• Officer Quarters</td>
+                                <td>11</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;&nbsp;• Official Quarters</td>
+                                <td>18</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Farm Machinery & Equipment</h2>
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Machinery Status</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sr. No</th>
+                                <th>Name of Machinery</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="machinery-table-body">
+                            <!-- Machinery data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Machinery Status Overview</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="machineryChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Laboratory Equipment</h2>
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Lab Equipment Status</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Equipment/Instrument</th>
+                                <th>Use/Application</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lab-equipment-table-body">
+                            <!-- Lab equipment data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Lab Equipment Status</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="labChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Human Resources</h2>
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Scientific Staff</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>BS No</th>
+                                <th>Sanctioned</th>
+                                <th>On Roll</th>
+                                <th>Vacant</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scientific-staff-table-body">
+                            <!-- Scientific staff data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Official Staff</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>BS No</th>
+                                <th>Sanctioned</th>
+                                <th>On Roll</th>
+                                <th>Vacant</th>
+                            </tr>
+                        </thead>
+                        <tbody id="official-staff-table-body">
+                            <!-- Official staff data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card full-width">
+                <div class="card-header">
+                    <h2 class="card-title">Staff Overview</h2>
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="staffChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Regional Agricultural Research Institute, Bahawalpur - Asset Management System</p>
+            <p>Principal Scientist: (Rashid Minhas)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Land data
+        const landData = {
+            labels: ['Direct Cultivated Area', 'Area Under Roads/Buildings'],
+            data: [123, 55],
+            backgroundColor: ['#4CAF50', '#8BC34A']
+        };
+
+        // Farm machinery data
+        const machineryData = [
+            { id: 1, name: "Rabi Drill", quantity: 1, status: "Working" },
+            { id: 2, name: "Cultivator 13 Phy", quantity: 1, status: "Working" },
+            { id: 3, name: "Cultivator", quantity: 3, status: "Working" },
+            { id: 4, name: "Grass Cutter Machine", quantity: 1, status: "Working" },
+            { id: 5, name: "Water Tank", quantity: 1, status: "Working" },
+            { id: 6, name: "Thrasher", quantity: 2, status: "Working" },
+            { id: 7, name: "Full Size Trolly", quantity: 1, status: "Working" },
+            { id: 8, name: "Single Plant Wheat Thrasher", quantity: 1, status: "Working" },
+            { id: 9, name: "Disk 16 Tavy", quantity: 1, status: "Working" },
+            { id: 10, name: "Karah", quantity: 1, status: "Working" },
+            { id: 11, name: "Tractor Reaper", quantity: 1, status: "Working" },
+            { id: 12, name: "Power Sprayer Machine", quantity: 2, status: "Working" },
+            { id: 13, name: "Lawn Roller", quantity: 1, status: "Working" },
+            { id: 14, name: "Ditcher", quantity: 1, status: "Working" },
+            { id: 15, name: "Bottom Plough", quantity: 1, status: "Working" },
+            { id: 16, name: "Disk Plough", quantity: 1, status: "Working" },
+            { id: 17, name: "Chisel Plough", quantity: 1, status: "Working" },
+            { id: 18, name: "Disk Plough", quantity: 1, status: "Working" },
+            { id: 19, name: "Wheat Thrasher", quantity: 2, status: "Working" },
+            { id: 20, name: "Seed Grader", quantity: 1, status: "Working" },
+            { id: 21, name: "Power Sprayer Machine", quantity: 7, status: "Working" },
+            { id: 22, name: "FIAT Dabang 85Hp, 2022", quantity: 1, status: "Working" },
+            { id: 23, name: "FIAT Tractor 75Hp, 1977", quantity: 1, status: "Working" },
+            { id: 24, name: "Tractor, Massey-385, 85Hp, 2012", quantity: 1, status: "Working" },
+            { id: 25, name: "Tractor Kabota, 30 Hp, 1995", quantity: 1, status: "Non Working" },
+            { id: 26, name: "Tractor Kabota, 30 Hp, 1995", quantity: 1, status: "Non Working" },
+            { id: 27, name: "Massy Fargosan 75 Hp, 2012", quantity: 1, status: "Non Working" },
+            { id: 28, name: "FIAT 75Hp, 2004", quantity: 1, status: "Non Working" }
+        ];
+
+        // Lab equipment data
+        const labEquipmentData = [
+            { name: "Top Loaded Balance", use: "To Weight Soil Samples", status: "Working" },
+            { name: "Water Bath Thermostatic", use: "To Incubate Samples In Water At Constant Temperature", status: "Working" },
+            { name: "Air Compressor", use: "-", status: "Out Of Order" },
+            { name: "Shaker With Timer", use: "To Shake And Mix Samples", status: "Working" },
+            { name: "Muffle Furnace", use: "Crashing The Samples To Determine Un Combustible Content", status: "Working" },
+            { name: "Magnetic Sterr", use: "To Mix Liquid", status: "Working" },
+            { name: "Spectrophotometer", use: "For Determination Of Phosphorus And Born In Soil", status: "Working" },
+            { name: "Centrifuge", use: "-", status: "Out Of Order" },
+            { name: "Flam Photometer", use: "For Determination Of Potassium And Sodium", status: "Out Of Order" },
+            { name: "Universal Shaking Apparatus", use: "For Shaking And Mixing", status: "Working" },
+            { name: "Oven", use: "Drying Of Samples And Sterilizing The Of Glass Ware", status: "Working" },
+            { name: "Ph Meter Portable", use: "To Determine The Ph Of Solution", status: "Working" },
+            { name: "Ph Meter Desktop", use: "To Determine The Ph Of Solution", status: "Working" },
+            { name: "EC Meter", use: "To Check The Electrical Conductivity Of Solution", status: "Working" },
+            { name: "EC Meter", use: "To Check The Electrical Conductivity Of Solution", status: "Working" },
+            { name: "Plant Grander", use: "To Grind And Thresh The Plant And Grains", status: "Working" },
+            { name: "Microscope", use: "To Identify Micro Organisms", status: "Working" },
+            { name: "Digital Balance", use: "To Weight Chemicals For Experiments", status: "Working" },
+            { name: "Colony Counter", use: "To Measure Microbial Colony", status: "Working" },
+            { name: "Humidifier", use: "To Create Artificial Humidity For Experiments", status: "Working" },
+            { name: "Germination Cabinet", use: "Grow Microbe Under Control Condition", status: "Out Of Order" },
+            { name: "Microscope", use: "To Identify Micro Organisms", status: "Working" },
+            { name: "Bio Incubator", use: "Grow Microbe Under Control Condition", status: "Working" },
+            { name: "Electric Balance And Seed Counter", use: "For Weight/Thousands Grain Weight And Counting", status: "Working" },
+            { name: "Canopy Temperature Meter", use: "To Observe The Crop Canopy Temperature", status: "Working" },
+            { name: "Digital Balance", use: "For Weighting The Small Samples Of Plant Parts", status: "Working" },
+            { name: "Leaf Area Scanner/Meter", use: "To Measure The Plant Leaf Area", status: "Working" }
+        ];
+
+        // Scientific staff data
+        const scientificStaffData = [
+            { position: "Principal Scientist", bs: 19, sanctioned: 8, onRoll: 1, vacant: 7 },
+            { position: "Senior Scientist", bs: 18, sanctioned: 12, onRoll: 11, vacant: 1 },
+            { position: "Scientific Officer", bs: 17, sanctioned: 8, onRoll: 8, vacant: 0 }
+        ];
+
+        // Official staff data
+        const officialStaffData = [
+            { position: "Assistant", bs: 16, sanctioned: 2, onRoll: 2, vacant: 0 },
+            { position: "Senior Scale Stenographer", bs: 16, sanctioned: 1, onRoll: 1, vacant: 0 },
+            { position: "Stenographer", bs: 15, sanctioned: 2, onRoll: 1, vacant: 1 },
+            { position: "Senior Clerk", bs: 14, sanctioned: 3, onRoll: 3, vacant: 0 },
+            { position: "Junior Clerk", bs: 11, sanctioned: 8, onRoll: 6, vacant: 2 },
+            { position: "Field Assistant", bs: 11, sanctioned: 15, onRoll: 1, vacant: 14 },
+            { position: "Laboratory Assistant", bs: 6, sanctioned: 5, onRoll: 2, vacant: 3 },
+            { position: "Tractor Driver", bs: 5, sanctioned: 4, onRoll: 2, vacant: 2 },
+            { position: "Budder", bs: 5, sanctioned: 1, onRoll: 1, vacant: 0 },
+            { position: "Jeep Driver", bs: 4, sanctioned: 4, onRoll: 3, vacant: 1 },
+            { position: "Tubewell Operator", bs: 3, sanctioned: 2, onRoll: 1, vacant: 1 },
+            { position: "Tube well Driver", bs: 2, sanctioned: 1, onRoll: 1, vacant: 0 },
+            { position: "Tractor Cleaner", bs: 1, sanctioned: 2, onRoll: 2, vacant: 0 },
+            { position: "Laboratory Attendant", bs: 1, sanctioned: 4, onRoll: 4, vacant: 0 },
+            { position: "Mali", bs: 1, sanctioned: 1, onRoll: 0, vacant: 1 },
+            { position: "Naib Qasid", bs: 1, sanctioned: 11, onRoll: 9, vacant: 2 },
+            { position: "Chowkidar", bs: 1, sanctioned: 1, onRoll: 1, vacant: 0 },
+            { position: "Sweeper", bs: 1, sanctioned: 2, onRoll: 2, vacant: 0 },
+            { position: "Beldar", bs: 1, sanctioned: 34, onRoll: 25, vacant: 9 }
+        ];
+
+        // Populate machinery table
+        const machineryTableBody = document.getElementById('machinery-table-body');
+        machineryData.forEach(item => {
+            const row = document.createElement('tr');
+            const statusClass = item.status === "Working" ? "status-working" : "status-nonworking";
+            row.innerHTML = `
+                <td>${item.id}</td>
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td><span class="status-indicator ${statusClass}"></span> ${item.status}</td>
+            `;
+            machineryTableBody.appendChild(row);
+        });
+
+        // Populate lab equipment table
+        const labEquipmentTableBody = document.getElementById('lab-equipment-table-body');
+        labEquipmentData.forEach(item => {
+            let statusClass = "status-working";
+            if (item.status === "Out Of Order") statusClass = "status-outoforder";
+            
+            row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.use}</td>
+                <td><span class="status-indicator ${statusClass}"></span> ${item.status}</td>
+            `;
+            labEquipmentTableBody.appendChild(row);
+        });
+
+        // Populate scientific staff table
+        const scientificStaffTableBody = document.getElementById('scientific-staff-table-body');
+        scientificStaffData.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.position}</td>
+                <td>${item.bs}</td>
+                <td>${item.sanctioned}</td>
+                <td>${item.onRoll}</td>
+                <td>
+                    <span class="badge ${item.vacant === 0 ? 'badge-success' : item.vacant < 3 ? 'badge-warning' : 'badge-danger'}">
+                        ${item.vacant}
+                    </span>
+                </td>
+            `;
+            scientificStaffTableBody.appendChild(row);
+        });
+
+        // Populate official staff table
+        const officialStaffTableBody = document.getElementById('official-staff-table-body');
+        officialStaffData.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.position}</td>
+                <td>${item.bs}</td>
+                <td>${item.sanctioned}</td>
+                <td>${item.onRoll}</td>
+                <td>
+                    <span class="badge ${item.vacant === 0 ? 'badge-success' : item.vacant < 3 ? 'badge-warning' : 'badge-danger'}">
+                        ${item.vacant}
+                    </span>
+                </td>
+            `;
+            officialStaffTableBody.appendChild(row);
+        });
+
+        // Create charts
+        const landCtx = document.getElementById('landChart').getContext('2d');
+        const machineryCtx = document.getElementById('machineryChart').getContext('2d');
+        const labCtx = document.getElementById('labChart').getContext('2d');
+        const staffCtx = document.getElementById('staffChart').getContext('2d');
+
+        // Land chart
+        new Chart(landCtx, {
+            type: 'doughnut',
+            data: {
+                labels: landData.labels,
+                datasets: [{
+                    data: landData.data,
+                    backgroundColor: landData.backgroundColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Land Distribution (Acres)'
+                    }
+                }
+            }
+        });
+
+        // Machinery chart
+        const workingMachinery = machineryData.filter(item => item.status === "Working").length;
+        const nonWorkingMachinery = machineryData.filter(item => item.status === "Non Working").length;
+        
+        new Chart(machineryCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Working', 'Non Working'],
+                datasets: [{
+                    data: [workingMachinery, nonWorkingMachinery],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Machinery Status'
+                    }
+                }
+            }
+        });
+
+        // Lab equipment chart
+        const workingLab = labEquipmentData.filter(item => item.status === "Working").length;
+        const outOfOrderLab = labEquipmentData.filter(item => item.status === "Out Of Order").length;
+        
+        new Chart(labCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Working', 'Out of Order'],
+                datasets: [{
+                    label: 'Lab Equipment',
+                    data: [workingLab, outOfOrderLab],
+                    backgroundColor: ['#4CAF50', '#FF9800'],
+                    borderColor: ['#2E8B57', '#F57C00'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 2
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Lab Equipment Status'
+                    }
+                }
+            }
+        });
+
+        // Staff chart
+        const totalSanctioned = scientificStaffData.reduce((sum, item) => sum + item.sanctioned, 0) + 
+                               officialStaffData.reduce((sum, item) => sum + item.sanctioned, 0);
+        const totalOnRoll = scientificStaffData.reduce((sum, item) => sum + item.onRoll, 0) + 
+                           officialStaffData.reduce((sum, item) => sum + item.onRoll, 0);
+        const totalVacant = scientificStaffData.reduce((sum, item) => sum + item.vacant, 0) + 
+                           officialStaffData.reduce((sum, item) => sum + item.vacant, 0);
+        
+        new Chart(staffCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Scientific Staff', 'Official Staff', 'Total'],
+                datasets: [
+                    {
+                        label: 'Sanctioned',
+                        data: [
+                            scientificStaffData.reduce((sum, item) => sum + item.sanctioned, 0),
+                            officialStaffData.reduce((sum, item) => sum + item.sanctioned, 0),
+                            totalSanctioned
+                        ],
+                        backgroundColor: '#4CAF50'
+                    },
+                    {
+                        label: 'On Roll',
+                        data: [
+                            scientificStaffData.reduce((sum, item) => sum + item.onRoll, 0),
+                            officialStaffData.reduce((sum, item) => sum + item.onRoll, 0),
+                            totalOnRoll
+                        ],
+                        backgroundColor: '#2196F3'
+                    },
+                    {
+                        label: 'Vacant',
+                        data: [
+                            scientificStaffData.reduce((sum, item) => sum + item.vacant, 0),
+                            officialStaffData.reduce((sum, item) => sum + item.vacant, 0),
+                            totalVacant
+                        ],
+                        backgroundColor: '#FF9800'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: false,
+                    },
+                    y: {
+                        stacked: false,
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Staff Position Overview'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
