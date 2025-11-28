@@ -7,7 +7,7 @@ import FeatureData from "@/main-page/FeatureData";
 
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isDashboardRoute = pathname === "/cotton-institute" || pathname === "/mns-data" || pathname === "/amri" || pathname === "/soil-water" || pathname === "/flori" || pathname === "/pest";
+  const isDashboardRoute = pathname === "/cotton-institute" || pathname === "/mns-data" || pathname === "/amri" || pathname === "/soil-water" || pathname === "/flori" || pathname === "/pest" || pathname === "/mri";
 
   return (
     <>

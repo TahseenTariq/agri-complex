@@ -101,7 +101,7 @@ export default function FeatureData() {
       window.location.href = "/mns-data";
     } else if (cottonId === 6) {
       // Navigate to Mango Research Institute dashboard
-      window.location.href = "/mri.html";
+      router.push("/mri");
     } else if (cottonId === 10) {
       // Navigate to Agricultural Mechanization Research Institute dashboard
       router.push("/amri");
