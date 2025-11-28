@@ -34,8 +34,7 @@ export default function PestPage() {
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
       <div className="container mx-auto max-w-6xl">
         <header className="pest-header">
-          <h1>Pesticide Quality Control Laboratory, Multan</h1>
-          <p>Digital Asset Management System</p>
+          <h1>Pesticide Quality Control Laboratory</h1>
         </header>
 
         <div className="dashboard">

@@ -67,8 +67,8 @@ export default function ExtPage() {
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
       <div className="container mx-auto max-w-7xl">
         <header className="ext-header">
-          <h1>Agriculture Extension Wing - District Multan</h1>
-          <p className="subtitle">Building Details & Vacancy Position as of October 27, 2025</p>
+          <h1>Agriculture Extension Wing</h1>
+          <p className="subtitle">Building Details & Vacancy Position</p>
         </header>
 
         <div className="summary-cards">

@@ -29,7 +29,7 @@ export default function MRIPage() {
   return (
     <div style={{ background: '#eef2f7', minHeight: '100vh' }}>
       <div className="mri-header">
-        <h1>Mango Research Institute Multan - Dashboard</h1>
+        <h1>Mango Research Institute</h1>
       </div>
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">

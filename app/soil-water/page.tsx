@@ -48,9 +48,8 @@ export default function SoilWaterPage() {
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
       <div className="container mx-auto max-w-7xl">
         <header className="sw-header">
-          <h1>Soil & Water Testing Laboratory for Research, Multan</h1>
-          <p className="subtitle">Agricultural Farm, Old Shujabad Road, Multan</p>
-        </header>
+          <h1>Soil & Water Testing Laboratory for Research</h1>
+          </header>
 
         {/* Project Overview */}
         <div className="section">

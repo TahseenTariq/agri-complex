@@ -66,7 +66,7 @@ export default function MNSUAMPage() {
     <div style={{ background: '#f5f7fa', minHeight: '100vh', padding: '20px' }}>
       <div className="container mx-auto max-w-7xl">
         <header className="mnsuam-header">
-          <h1>MNSUAM Laboratory & Facilities Dashboard</h1>
+          <h1>MNSUAM Laboratory & Facilities</h1>
           <p className="subtitle">Comprehensive Overview of Laboratories, Equipment, and Facilities</p>
         </header>
 
