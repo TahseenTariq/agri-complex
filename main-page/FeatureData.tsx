@@ -107,7 +107,7 @@ export default function FeatureData() {
       router.push("/amri");
     } else if (cottonId === 11) {
       // Navigate to Entomological Research Sub Station Multan dashboard
-      window.location.href = "/ento.html";
+      router.push("/ento");
     } else if (cottonId === 9) {
       // Navigate to Agricultural Extension dashboard
       router.push("/ext");
@@ -119,13 +119,13 @@ export default function FeatureData() {
       router.push("/pest");
     } else if (cottonId === 12) {
       // Navigate to RAEDC dashboard
-      window.location.href = "/RAEDC.html";
+      router.push("/raedc");
     } else if (cottonId === 8) {
       // Navigate to MNSUAM dashboard
       router.push("/mnsuam");
     } else if (cottonId === 13) {
       // Navigate to RARI dashboard
-      window.location.href = "/Rari.html";
+      router.push("/rari");
     } else if (cottonId === 2) {
       // Navigate to Soil & Water Research Institute dashboard
       router.push("/soil-water");
