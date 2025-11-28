@@ -129,10 +129,8 @@ export default function FeatureData() {
     } else if (cottonId === 2) {
       // Navigate to Soil & Water Research Institute dashboard
       window.location.href = "/Soil_Water.html";
-    } else {
-      // Navigate to soil-institute page for all other items
-      router.push(`/soil-institute/${cottonId}`);
     }
+    // All institutes now have specific routes - no default case needed
   };
 
   return (
