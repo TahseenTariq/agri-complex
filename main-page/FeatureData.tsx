@@ -110,7 +110,7 @@ export default function FeatureData() {
       window.location.href = "/ento.html";
     } else if (cottonId === 9) {
       // Navigate to Agricultural Extension dashboard
-      window.location.href = "/ext.html";
+      router.push("/ext");
     } else if (cottonId === 5) {
       // Navigate to Floriculture Research Institute dashboard
       router.push("/flori");
@@ -122,7 +122,7 @@ export default function FeatureData() {
       window.location.href = "/RAEDC.html";
     } else if (cottonId === 8) {
       // Navigate to MNSUAM dashboard
-      window.location.href = "/MNSUAM.html";
+      router.push("/mnsuam");
     } else if (cottonId === 13) {
       // Navigate to RARI dashboard
       window.location.href = "/Rari.html";
