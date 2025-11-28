@@ -35,12 +35,6 @@ const cottons: Cotton[] = [
   },
   
   {
-    id: 4,
-    name: "Horticulture Research Institute",
-    image: "/hort.jpg.jpg",
-    imageAlt: "Horticulture Research Institute",
-  },
-  {
     id: 5,
     name: "Floriculture Research Institute",
     image: "/flori.jpg.jpg",
@@ -76,6 +70,24 @@ const cottons: Cotton[] = [
     image: "/amri.jpg.jpeg",
     imageAlt: "Agricultural Mechanization Research Institute",
   },
+  {
+    id: 11,
+    name: "Entomological Research Sub Station Multan",
+    image: "/ent.jpg.jpg",
+    imageAlt: "Entomological Research Sub Station Multan",
+  },
+  {
+    id: 12,
+    name: "RAEDC",
+    image: "/raedc.jpg.jpg",
+    imageAlt: "RAEDC",
+  },
+  {
+    id: 13,
+    name: "RARI",
+    image: "/rai.jpg.jpg",
+    imageAlt: "RARI",
+  },
 ];
 
 export default function FeatureData() {
@@ -87,6 +99,36 @@ export default function FeatureData() {
     } else if (cottonId === 1) {
       // Navigate to MNS Lab / MNS Data page - force full page navigation
       window.location.href = "/mns-data";
+    } else if (cottonId === 6) {
+      // Navigate to Mango Research Institute dashboard
+      window.location.href = "/mri.html";
+    } else if (cottonId === 10) {
+      // Navigate to Agricultural Mechanization Research Institute dashboard
+      window.location.href = "/amri.html";
+    } else if (cottonId === 11) {
+      // Navigate to Entomological Research Sub Station Multan dashboard
+      window.location.href = "/ento.html";
+    } else if (cottonId === 9) {
+      // Navigate to Agricultural Extension dashboard
+      window.location.href = "/ext.html";
+    } else if (cottonId === 5) {
+      // Navigate to Floriculture Research Institute dashboard
+      window.location.href = "/flori.html";
+    } else if (cottonId === 7) {
+      // Navigate to Pesticides Quality Control Lab dashboard
+      window.location.href = "/pest.html";
+    } else if (cottonId === 12) {
+      // Navigate to RAEDC dashboard
+      window.location.href = "/RAEDC.html";
+    } else if (cottonId === 8) {
+      // Navigate to RAEDC dashboard
+      window.location.href = "/MNSUAM.html";
+    } else if (cottonId === 13) {
+      // Navigate to RARI dashboard
+      window.location.href = "/Rari.html";
+    } else if (cottonId === 2) {
+      // Navigate to Soil & Water Research Institute dashboard
+      window.location.href = "/Soil_Water.html";
     } else {
       // Navigate to soil-institute page for all other items
       router.push(`/soil-institute/${cottonId}`);

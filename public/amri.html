@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AMRI Machinery Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+ body { background: #f4f6f9; }
+ .nav-header{background:#2c3e50;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 4px rgba(0,0,0,0.1);position:sticky;top:0;z-index:1000;}
+ .nav-header a{color:#fff;text-decoration:none;padding:8px 16px;background:#3498db;border-radius:4px;transition:background 0.3s;font-weight:500;}
+ .nav-header a:hover{background:#2980b9;}
+ .card { border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+ h1, h2 { font-weight: 700; }
+ .table thead { background: #003f5c; color: white; }
+</style>
+</head>
+<body>
+<div class="nav-header">
+    <span style="font-weight:600;">Agriculture Complex Multan</span>
+    <a href="/">Home</a>
+</div>
+<div class="container py-4">
+  <h1 class="text-center mb-4">AMRI Machinery Dashboard</h1>
+
+  <!-- Summary Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <h2 id="totalCount">0</h2>
+        <p>Total Machinery</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <h2 id="functionalCount">0</h2>
+        <p>Functional</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3 text-center">
+        <h2 id="nonFunctionalCount">0</h2>
+        <p>Non-Functional</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h5 class="text-center">Functional vs Non-Functional</h5>
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h5 class="text-center">Top Machinery Types</h5>
+        <canvas id="topItemsChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="card p-4 mb-4">
+    <h5>Complete Machinery List</h5>
+    <table class="table table-striped table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Machinery Name</th>
+          <th>Quantity</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="dataTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const machineryData = [
+  {name:"Disk Plow", qty:1, status:"Functional"},
+  {name:"Ditcher", qty:1, status:"Functional"},
+  {name:"Chisel Plow", qty:1, status:"Functional"},
+  {name:"Border Disk", qty:1, status:"Functional"},
+  {name:"Post Hole Digger", qty:1, status:"Functional"},
+  {name:"Fertilizer Spreader", qty:1, status:"Functional"},
+  {name:"Rice Transplanter", qty:1, status:"Not Functional"},
+  {name:"Sub Soiler", qty:1, status:"Not Functional"},
+  {name:"Rotary Slasher", qty:1, status:"Not Functional"},
+  {name:"Spring Tine Cultivator", qty:1, status:"Not Functional"},
+  {name:"Sugarcane set cutter", qty:1, status:"Not Functional"},
+  {name:"Self-Leveling boom sprayer", qty:1, status:"Not Functional"}
+];
+
+// Summary Calculations
+const total = machineryData.length;
+const functional = machineryData.filter(x => x.status === "Functional").length;
+const nonFunctional = total - functional;
+
+document.getElementById("totalCount").innerText = total;
+document.getElementById("functionalCount").innerText = functional;
+document.getElementById("nonFunctionalCount").innerText = nonFunctional;
+
+// Fill Table
+const table = document.getElementById("dataTable");
+machineryData.forEach((item, index) => {
+  table.innerHTML += `<tr>
+      <td>${index+1}</td>
+      <td>${item.name}</td>
+      <td>${item.qty}</td>
+      <td>${item.status}</td>
+    </tr>`;
+});
+
+// Chart 1 - Functional vs Non Functional
+new Chart(document.getElementById('statusChart'), {
+  type: 'pie',
+  data: {
+    labels: ['Functional','Not Functional'],
+    datasets: [{
+      data: [functional, nonFunctional]
+    }]
+  }
+});
+
+// Chart 2 - Top Items (Quantities)
+new Chart(document.getElementById('topItemsChart'), {
+  type: 'bar',
+  data: {
+    labels: machineryData.map(x=>x.name.substring(0,12)),
+    datasets: [{
+      label: 'Qty',
+      data: machineryData.map(x=>x.qty)
+    }]
+  }
+});
+</script>
+
+</body>
+</html>
