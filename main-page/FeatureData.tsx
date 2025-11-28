@@ -113,10 +113,10 @@ export default function FeatureData() {
       window.location.href = "/ext.html";
     } else if (cottonId === 5) {
       // Navigate to Floriculture Research Institute dashboard
-      window.location.href = "/flori.html";
+      router.push("/flori");
     } else if (cottonId === 7) {
       // Navigate to Pesticides Quality Control Lab dashboard
-      window.location.href = "/pest.html";
+      router.push("/pest");
     } else if (cottonId === 12) {
       // Navigate to RAEDC dashboard
       window.location.href = "/RAEDC.html";
@@ -128,7 +128,7 @@ export default function FeatureData() {
       window.location.href = "/Rari.html";
     } else if (cottonId === 2) {
       // Navigate to Soil & Water Research Institute dashboard
-      window.location.href = "/Soil_Water.html";
+      router.push("/soil-water");
     }
     // All institutes now have specific routes - no default case needed
   };
